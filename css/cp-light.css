@@ -1,0 +1,112 @@
+/* =====================================================================
+   변액을더하다 밝은 톤 (2026-10-27 상무님: "색이 어두워 칙칙하다 → 톡을더하다처럼 밝게")
+   cp-pro.css 뒤에 붙인다. 화면 전용 — 인쇄 CSS는 건드리지 않는다. 이 파일을 빼면 남색 톤으로 돌아간다.
+   축: 흰 바탕 + 옅은 하늘색 칸 + 노랑 강조. 제목·숫자는 진한 남색으로 믿음감 유지.
+   ===================================================================== */
+@media screen {
+:root{
+  --pro-bg:#F7F9FC; --pro-bg2:#F2F5F9; --pro-line:#E5E8EB; --pro-line2:#D1D6DE;
+  --pro-ink:#191F28; --pro-ink2:#4E5968; --pro-ink3:#8B95A1;
+  --pro-gold:#F5B800; --pro-gold2:#8A6100; --pro-navy:#1B2B4B; --pro-navy2:#24375E;
+  --lt-sky:#EEF5FF; --lt-sky2:#DCE9FF; --lt-yel:#FFD43B; --lt-yel2:#FFF6CC;
+}
+html body{background:#F7F9FC!important}
+
+/* ── 위 메뉴 띠: 흰 띠 + 진한 글자 ── */
+#page1 .page-header,#page2 .page-header{background:rgba(255,255,255,.96)!important;border-bottom:1px solid var(--pro-line)!important;box-shadow:0 2px 12px rgba(25,31,40,.05)!important}
+#page1 .page-header::before,#page2 .page-header::before{background:linear-gradient(90deg,transparent,var(--lt-yel),transparent)!important}
+html body .page-header .header-inner,html body .page-header .header-inner *{color:var(--pro-ink)}
+html body #page2 .page-header .back-btn,html body .page-header .socialLinkToggle,html body .page-header .logout-btn,html body .page-header .member-mgmt-btn,html body .page-header .pwa-install-btn{border-color:var(--pro-line2)!important;color:var(--pro-ink2)!important;background:#fff!important}
+html body .page-header .logout-btn:hover,html body .page-header .back-btn:hover,html body .page-header .socialLinkToggle:hover,html body .page-header .member-mgmt-btn:hover,html body .page-header .pwa-install-btn:hover{background:var(--pro-bg2)!important;color:var(--pro-ink)!important}
+html body .page-header .login-user-badge,html body .page-header .login-user-badge *,html body #page2 .page-header #loginUserBadgePage2,html body #page2 .page-header #loginUserBadgePage2 *{background:var(--lt-sky)!important;border-color:var(--lt-sky2)!important;color:var(--pro-navy)!important}
+/* 제목 글자: 어두운 바탕용 흰 글자·금빛 번쩍임을 진한 글자로 */
+#page1 .page-header h1,#page2 .page-header h1,#page1 .page-header .logo-title,#page2 .page-header .logo-title,#page1 .logo-main-title,#page2 .logo-main-title,
+html body .page-header .header-inner *:not(.lt-ai):not(.print-btn):not(.print-btn *){color:var(--pro-ink)!important;-webkit-text-fill-color:var(--pro-ink)!important;text-shadow:none!important}
+#page1 .logo-main-title .lt-word{background:none!important;animation:none!important}
+#page1 .logo-main-title .lt-etf{color:#C28A00!important;-webkit-text-fill-color:#C28A00!important}
+#page1 .logo-main-title .lt-ai,html body .page-header .lt-ai{background:var(--lt-yel)!important;-webkit-text-fill-color:#191F28!important;color:#191F28!important;box-shadow:none!important;animation:none!important}
+html body .page-header .cp-plan-badge{background:var(--lt-yel2)!important;border-color:#FFE27A!important;color:var(--pro-gold2)!important;-webkit-text-fill-color:var(--pro-gold2)!important}
+html body .page-header .logout-btn,html body .page-header .logout-btn *{color:var(--pro-ink2)!important;-webkit-text-fill-color:var(--pro-ink2)!important}
+
+/* ── 노랑 주 버튼 (만들기·인쇄·로그인·가입) ── */
+#page1 .generate-btn,#page2 .generate-btn,html body #page2 .page-header .print-btn,
+html body #pwLockOverlay .pw-login-submit-btn,html body .signup-overlay .signup-submit-btn,html body .signup-overlay .signup-done-btn,
+.gn-join,.gh-cta button{background:var(--lt-yel)!important;color:#191F28!important;box-shadow:0 6px 16px rgba(245,184,0,.25)!important}
+
+/* ── 작은 번호·배지: 옅은 노랑 ── */
+#page1 .step-num,#page2 .step-num,#page1 .etab-badge,#page2 .etab-badge,#page1 .ai-badge,#page2 .ai-badge,html body #page1 .ai-recommend-box .ai-badge{background:var(--lt-yel2)!important;color:var(--pro-gold2)!important}
+#page1 .ai-btn-icon-wrap,#page2 .ai-btn-icon-wrap{background:var(--lt-sky)!important}
+#page1 .step-card::before,#page2 .step-card::before,#page1 .step-card::after,#page2 .step-card::after{background:var(--lt-yel)!important}
+#page1 .radio-label:has(input:checked),#page2 .radio-label:has(input:checked),#page1 .etab:has(input:checked),#page2 .etab:has(input:checked),#page1 .etab.active,#page2 .etab.active,#page1 .etab.on,#page2 .etab.on{background:var(--lt-yel2)!important;border-color:var(--lt-yel)!important;color:var(--pro-gold2)!important}
+#page1 .slider-card:not(.zero-ratio),#page2 .slider-card:not(.zero-ratio),html body #page1 .fund-table-wrap .slider-card:not(.zero-ratio){background:linear-gradient(90deg,rgba(255,212,59,.18),rgba(255,212,59,.03) 72%)!important}
+
+/* ── 오른쪽 결과 칸: 남색 → 옅은 하늘 ── */
+#page1 .preview-card,#page2 .preview-card{background:linear-gradient(180deg,#F3F8FF,#fff)!important;border:1px solid var(--lt-sky2)!important;box-shadow:0 12px 30px rgba(27,43,75,.08)!important;color:var(--pro-ink)!important}
+#page1 .preview-card .preview-title,#page2 .preview-card .preview-title,#page1 .preview-card .preview-title *,#page2 .preview-card .preview-title *{color:var(--pro-navy)!important}
+#page1 .preview-card .legend-item,#page2 .preview-card .legend-item{color:var(--pro-ink2)!important}
+#page1 .expected-return-card .return-item,#page2 .expected-return-card .return-item{background:#fff!important;border:1px solid var(--lt-sky2)!important}
+#page1 .expected-return-card .return-label,#page2 .expected-return-card .return-label,#page1 .return-notice,#page2 .return-notice{color:var(--pro-ink3)!important}
+#page1 .expected-return-card .return-value,#page2 .expected-return-card .return-value{color:#E03A3E!important}
+
+/* ── 결과 화면: 적립액 줄·레벨UP 칸·표 머리 ── */
+html body #page2 .pf-amount-row,html body #page2 .pf-card.pf-amount-row,html body #page2 .pf-amount-row.pf-card,
+html body #page2 .pf-card.pf-levelup-death-card{background:var(--lt-sky)!important;border:1px solid var(--lt-sky2)!important}
+html body #page2 .pf-amount-row *{color:var(--pro-ink2)!important}
+html body #page2 .pf-amount-row .pf-amount-value,html body #page2 .pf-amount-row b{color:var(--pro-navy)!important}
+html body #page2 .pf-levelup-death-card .pf-ldb-title,html body #page2 .pf-levelup-death-card .pf-ldb-sub{color:var(--pro-ink2)!important}
+html body #page2 .pf-levelup-death-card .pf-ldb-desc{color:var(--pro-navy)!important}
+html body #page2 table thead th{background:var(--lt-sky)!important;color:var(--pro-navy)!important}
+html body #page2 .year-badge{background:var(--lt-yel2)!important;color:var(--pro-gold2)!important}
+
+/* ── 첫 화면(로그인 대문): 남색 → 옅은 노랑·하늘 ── */
+html body #pwLockOverlay,html body #pwLockOverlay.pw-lock-overlay,html body .signup-overlay{
+  background:radial-gradient(900px 460px at 80% 0%,rgba(255,212,59,.22),transparent 62%),linear-gradient(180deg,#FFFDF4 0%,#F7F9FC 45%,#EEF5FF 100%)!important;background-color:#F7F9FC!important}
+html body #pwLockOverlay{--cp-ink:#191F28;--cp-ink2:#4E5968;--cp-ink3:#8B95A1;--cp-goldtx:#C28A00;--cp-gold:#F5B800}
+html body #pwLockOverlay .gate-logo3d iframe{mix-blend-mode:normal}
+html body #pwLockOverlay .gate-fx{opacity:.15}
+html body #pwLockOverlay .gate-h{text-shadow:none!important;color:#191F28!important;opacity:1!important}
+html body #pwLockOverlay .gate-h em{color:#191F28!important;background:linear-gradient(transparent 60%,rgba(255,212,59,.6) 60%)}
+html body #pwLockOverlay .gate-p{color:#4E5968!important;font-weight:400!important;opacity:1!important}
+html body #pwLockOverlay .gate-kicker{color:#C28A00!important;opacity:1!important}
+html body #pwLockOverlay .gate-note{color:#8B95A1!important}
+html body #pwLockOverlay .gate-brand{opacity:1!important;filter:none!important}
+html body #pwLockOverlay .pw-lock-box,html body .signup-overlay .signup-box{box-shadow:0 18px 44px rgba(27,43,75,.12)!important;border:1px solid var(--pro-line)!important}
+html body #pwLockOverlay .pw-lock-box .gate-tabs button.on,html body #pwLockOverlay #signupOverlay .gate-tabs button.on{color:var(--pro-ink)!important}
+html body .signup-overlay .signup-icon{background:var(--lt-yel2)!important;color:var(--pro-gold2)!important}
+
+.gate-nav{background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--pro-line)!important}
+.gn-brand,.gn-nm{color:var(--pro-ink)!important}.gn-nm i{color:#C28A00!important}
+.gn-mk{border-color:var(--lt-yel)!important;color:#C28A00!important}
+.gn-nm small{color:var(--pro-ink3)!important}
+.gn-menu a{color:var(--pro-ink2)!important}.gn-menu a:hover{color:var(--pro-ink)!important;background:var(--pro-bg2)!important}
+.gn-login{border:1px solid var(--pro-line2)!important;color:var(--pro-ink)!important;background:#fff!important}
+
+.gate-flow div{border:1px solid var(--pro-line)!important;background:#fff!important}
+.gate-flow b,.ghs>b{background:var(--lt-yel)!important;color:#191F28!important}
+.gate-flow span{color:var(--pro-ink)!important}.gate-flow i{color:#B0B8C1!important}
+
+.gh-eyebrow{color:#C28A00!important}
+.gh-h{color:var(--pro-ink)!important}
+.gh-h em{color:var(--pro-ink)!important;background:linear-gradient(transparent 62%,rgba(255,212,59,.55) 62%)}
+.gh-sub,.gh-more{color:var(--pro-ink2)!important}
+.gh-feat{background:#fff!important;border-top:1px solid var(--pro-line)!important}
+.ghc{border-top:3px solid var(--lt-yel)!important;box-shadow:0 8px 24px rgba(25,31,40,.06)!important;border-left:1px solid var(--pro-line);border-right:1px solid var(--pro-line);border-bottom:1px solid var(--pro-line)}
+.ghc-no{color:#C28A00!important}
+.gh-how{background:var(--lt-sky)!important}
+.ghs{border:1px solid var(--lt-sky2)!important;background:#fff!important}
+.ghs strong{color:var(--pro-ink)!important}.ghs span{color:var(--pro-ink2)!important}
+.gh-trust{color:var(--pro-ink2)!important}.gh-trust span:before{background:var(--lt-yel)!important}
+.gh-price{background:#FFFBEA!important}
+.gh-cta button.alt{background:#fff!important;border:1px solid var(--pro-line2)!important;color:var(--pro-ink)!important;box-shadow:none!important}
+
+/* ── 아래 회사 정보: 남색 띠 → 옅은 회색 ── */
+html body .cp-foot.cp-foot-pro,html body #pwLockOverlay>.cp-foot.cp-foot-pro,html body #pwLockOverlay>.cp-foot{background:#F2F4F6!important;color:var(--pro-ink2)!important;border-top:1px solid var(--pro-line)!important}
+.cf-nm,.cf-made b{color:var(--pro-ink)!important}.cf-nm i{color:#C28A00!important}
+.cf-mk{border-color:var(--lt-yel)!important;color:#C28A00!important}
+.cf-nm small,.cf-contact,.cf-info dt,.cf-bottom{color:var(--pro-ink3)!important}
+.cf-made,.cf-links a{color:var(--pro-ink2)!important}.cf-links a:hover{color:var(--pro-ink)!important}
+.cf-links b{color:#C28A00!important}.cf-links a::before{color:#C28A00!important}
+.cf-contact b,.cf-info dd{color:#333D4B!important}
+.cf-badges span{border-color:#FFE27A!important;background:var(--lt-yel2)!important;color:var(--pro-gold2)!important}
+.cf-bottom{border-top:1px solid var(--pro-line)!important}
+}

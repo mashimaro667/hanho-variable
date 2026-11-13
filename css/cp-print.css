@@ -1,0 +1,361 @@
+/* =====================================================
+   인쇄(A4 가로) — 블랙·골드·아이보리 톤 + 여백을 줄여 지면을 꽉 채운다.
+   원칙: 높이를 고정하지 않는다(구성이 바뀌어도 자연스럽게 흐르게) · 카드·행은 중간에서 끊지 않는다 · 표 머리는 페이지마다 반복.
+   안전여백 6mm (프린터가 가장자리 3~5mm 를 못 찍어 잘리는 것을 막는다).
+   ===================================================== */
+@page { size: A4 landscape; margin: 6mm; }
+.cp-print-img { display: none; }
+
+@media print {
+
+  *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body { background: #fff !important; }
+
+  /* 헤더: 블랙 + 금색 선 */
+  #page2 .page2-header { background: #14130F !important; border-bottom: 2px solid #C9A96A !important; border-radius: 6px !important; padding: 5px 12px !important; margin-bottom: 5px !important; }
+  #page2 .page2-header::before { display: none !important; }
+  #page2 .header-co-logo { display: none !important; }      /* 인쇄물은 2쪽 구성 유지를 위해 로고 줄을 넣지 않는다 */
+  #page2 .proposal-main-title { color: #fff !important; }
+  #page2 .proposal-sub-title { color: #D9C79B !important; }
+
+  /* 섹션·카드: 아이보리 종이 + 금색 헤어라인 */
+  #page2 .result-section, #page2 .p2-portfolio-wrap, #page2 .p2-sim-wrap { background: #fff !important; border: 1px solid #E2D9C2 !important; box-shadow: none !important; }
+  #page2 .section-title { color: #14130F !important; border-bottom-color: #C9A96A !important; }
+  #page2 .profile-section-title { -webkit-text-fill-color: #14130F !important; background: none !important; color: #14130F !important; }
+  #page2 .pf-card { background: #fff !important; border: 1px solid #E2D9C2 !important; box-shadow: none !important; }
+  #page2 .pf-card.pf-amount-row { background: #14130F !important; border-color: #8E7448 !important; }
+  #page2 .pf-card.pf-amount-row * { color: #F4F2EC !important; }
+  #page2 .pf-card.pf-amount-row [class*="value"], #page2 .pf-card.pf-amount-row [class*="amount"] { color: #E6CC92 !important; }
+  #page2 .pf-rg-header { background: #F4EFE2 !important; color: #5F5A4C !important; }
+  #page2 .pf-rg-cell--accent { background: #F6EBD0 !important; }
+  #page2 .pf-sim-basis-card, #page2 .cross-fund-common-card { background: #F4EFE2 !important; border: 1px solid #E2D9C2 !important; }
+
+  /* 비교표 */
+  #page2 .cross-header-banner, #page2 .cross-winner-box, #page2 .securities-box { background: #14130F !important; border: 1px solid #8E7448 !important; color: #E6CC92 !important; }
+  #page2 .cross-header-banner *, #page2 .cross-winner-box *, #page2 .securities-box * { color: inherit; }
+  #page2 th.cross-th-year { background: #14130F !important; color: #fff !important; }
+  #page2 th.cross-th-lv { background: #2A261B !important; color: #E6CC92 !important; border-bottom: 3px solid #8E7448 !important; }
+  #page2 th.cross-th-mk { background: #C9A96A !important; color: #1A150A !important; border-bottom: 3px solid #8E7448 !important; }
+  #page2 th.cross-th-lv *, #page2 th.cross-th-mk * { color: inherit !important; }
+  #page2 td.cross-td-year { background: #F4EFE2 !important; color: #3A362B !important; }
+  #page2 .cross-table-row { background: #fff !important; }
+  #page2 td.cross-td-mk.cross-td-win { background: #FBF3DC !important; }
+  #page2 td.cross-td-lv-7y, #page2 .cross-row-7y td { background: #F3ECD8 !important; box-shadow: inset 3px 0 0 #C9A96A !important; }
+  #page2 .cross-7y-badge { background: #14130F !important; color: #E6CC92 !important; }
+  #page2 .cross-summary-card { background: #fff !important; border: 1px solid #E2D9C2 !important; }
+  #page2 .pos { color: #D63A40 !important; }
+  #page2 .neg { color: #3F7BC4 !important; }
+
+  /* 흐름 제어: 카드·행은 쪼개지 않고, 표 머리는 반복 */
+  #page2 thead { display: table-header-group; }
+  #page2 tr, #page2 .pf-card, #page2 .cross-summary-card, #page2 .fund-detail-cards > * { break-inside: avoid !important; page-break-inside: avoid !important; }
+  /* 페이지마다 반복되던 파란 상단 줄 제거 */
+  body::before { display: none !important; }
+
+  /* 푸터: 블랙·금색, 낱장으로 밀려나지 않게 컴팩트 */
+  #page2 .page2-footer { background: #14130F !important; color: #D9C79B !important; padding: 4px 12px !important; font-size: 8px !important; border-radius: 4px; break-before: avoid !important; page-break-before: avoid !important; }
+  #page2 .page2-footer::before { background: #C9A96A !important; animation: none !important; height: 1px !important; }
+  #page2 .securities-box { padding: 8px 14px !important; }
+  #page2 .securities-section { padding: 6px 10px !important; margin-bottom: 4px !important; }
+
+  /* ① 결론 카드 (인쇄용: 잉크를 아끼는 아이보리 판) */
+  #page2 .cx-hero { background: #FBF6E8 !important; border: 1.5px solid #C9A96A !important; border-radius: 8px; padding: 7px 10px !important; margin-bottom: 6px !important; color: #14130F !important; }
+  #page2 .cx-hero-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+  #page2 .cx-eyebrow { font-size: 11px; font-weight: 900; color: #14130F !important; }
+  #page2 .cx-eyebrow i { color: #8E7448 !important; }
+  #page2 .cx-sub { font-size: 8.5px; color: #6B6656 !important; }
+  #page2 .cx-hero-grid { display: grid !important; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: stretch; }
+  #page2 .cx-opt { background: #fff !important; border: 1px solid #E2D9C2 !important; border-radius: 6px; padding: 5px 8px; text-align: center; }
+  #page2 .cx-opt.win { border-color: #C9A96A !important; background: #FFF9E8 !important; box-shadow: none !important; }
+  #page2 .cx-opt-name { font-size: 9.5px; font-weight: 800; color: #3A362B !important; }
+  #page2 .cx-opt-name i { color: #8E7448 !important; }
+  #page2 .cx-opt-fv { font-size: 21px; font-weight: 900; color: #14130F !important; line-height: 1.15; letter-spacing: -.03em; }
+  #page2 .cx-opt-fv em, #page2 .cross-td-fv em { font-size: .5em; font-style: normal; font-weight: 700; margin-left: 1px; }
+  #page2 .cx-opt-gain { font-size: 8.5px; color: #6B6656 !important; }
+  #page2 .cx-vs { align-self: center; font-size: 9px; font-weight: 900; color: #8E7448 !important; }
+  #page2 .cx-verdict { margin-top: 5px; padding-top: 4px; border-top: 1px dashed #C9A96A; text-align: center; font-size: 10px; color: #3A362B !important; }
+  #page2 .cx-verdict b { color: #14130F !important; }
+  #page2 .cx-verdict .cx-diff { font-size: 14px; font-weight: 900; color: #8E6A1A !important; }
+  #page2 .cx-verdict small { display: block; font-size: 7.5px; color: #8C8878 !important; }
+
+  /* ② 공통 포트폴리오 칩 */
+  #page2 .cross-fund-common-card { display: flex !important; flex-wrap: wrap; align-items: center; gap: 3px 5px; padding: 3px 8px !important; margin-bottom: 5px !important; border-radius: 6px; }
+  #page2 .cx-chips-title { font-size: 8.5px; font-weight: 800; color: #5F5A4C !important; margin-right: 2px; }
+  #page2 .cx-chip { font-size: 8.5px; border: 1px solid #E2D9C2; border-radius: 999px; padding: 1px 7px; background: #fff !important; color: #3A362B !important; }
+
+  /* ③ 비교표: 큰 숫자 한 줄 + 수익 한 줄 */
+  #page2 .cross-main-table { width: 100%; border-collapse: collapse; }
+  #page2 td.cross-td-year { width: 66px; text-align: center; font-size: 10px; font-weight: 800; }
+  #page2 .cross-td-principal { font-size: 6.5px; font-weight: 500; color: #8C8878 !important; white-space: nowrap; }
+  #page2 .cross-yr7 { font-size: 10px; font-weight: 900; }
+  #page2 .cross-yr7-tag { font-size: 6.5px; font-weight: 700; color: #8E7448 !important; white-space: nowrap; }
+  #page2 .cross-table-row td { padding: 4px 8px !important; }
+  #page2 .cross-td-fv { font-size: 14px; font-weight: 900; color: #14130F !important; line-height: 1.15; }
+  #page2 .cross-td-fv .cross-win-badge { color: #C9A96A !important; font-size: .65em; }
+  #page2 .cross-td-gain { margin-top: 1px; font-size: 8px; color: #6B6656 !important; }
+  #page2 .cross-td-rate { display: inline-block; margin-left: 3px; padding: 0 5px; border-radius: 999px; font-weight: 800; }
+  #page2 .cx-th-sub { display: block; font-size: 7px; font-weight: 400; opacity: .85; }
+  #page2 .cx-exp { font-size: 7px; color: #6B6656 !important; padding: 2px 6px; background: #F4EFE2 !important; }
+  #page2 th.cross-th-year, #page2 th.cross-th-lv, #page2 th.cross-th-mk { padding: 3px 6px !important; font-size: 9.5px !important; }
+
+  /* 왼쪽 도넛은 작게 — 프로파일 아래에 한 장으로 들어오게 */
+  #page2 .donut-canvas-wrap { max-width: 92px !important; max-height: 92px !important; margin: 0 auto 2px !important; }
+  #page2 .p2-portfolio-wrap { padding: 4px 8px !important; }
+
+
+  /* 왼쪽 "선택 포트폴리오" 카드를 압축해 1페이지 안에 들어오게 (오른쪽은 그대로) */
+  #page2 .p2-portfolio-wrap .section-title { margin-bottom: 2px !important; padding-bottom: 2px !important; }
+  #page2 .donut-canvas-wrap { max-width: 96px !important; max-height: 96px !important; margin: 0 auto 2px !important; }
+  #page2 .portfolio-item-v2 { padding: 2px 0 !important; margin: 0 !important; min-height: 0 !important; line-height: 1.15 !important; }
+  #page2 .portfolio-item-v2, #page2 .portfolio-item-v2 * { font-size: 9px !important; }
+
+  /* 도넛은 왼쪽, 비율 목록은 오른쪽 — 세로로 쌓지 않아 카드 높이를 절반으로 */
+  #page2 .portfolio-wrap-v2 { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 10px !important; }
+  #page2 .portfolio-wrap-v2 .donut-canvas-wrap { flex: none !important; margin: 0 !important; }
+  #page2 .portfolio-list-v2 { flex: 1 1 auto !important; min-width: 0; }
+
+  /* 1페이지를 더 채우기(오른쪽 결론·표 확대) — 2쪽 구성이 유지되는 것을 확인한 크기 */
+  #page2 .cx-opt-fv { font-size: 25px !important; }
+  #page2 .cx-opt { padding: 8px 8px !important; }
+  #page2 .cx-hero { padding: 9px 12px !important; }
+  #page2 .cross-table-row td { padding: 8px 9px !important; }
+  #page2 .cross-td-fv { font-size: 16.5px !important; }
+  #page2 .cross-td-gain { font-size: 9px !important; }
+
+  /* 인쇄 순간에 진입 애니메이션 중간 상태(흐림)로 찍히지 않도록 */
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+
+
+  /* ══════════════════════════════════════════════════════════════
+     2026-09-21 재구성 — 단독(상품 미선택·레벨UP·모키) 인쇄: 1쪽 = 결론·그래프·표 전부, 2쪽 = 펀드 상세·안내.
+     A4 가로 인쇄영역 285mm × 198mm 기준. 그래프는 인쇄 직전에 이 칸 크기(160×48mm)로 다시 그려 끼운다(js/cp-print.js).
+     ══════════════════════════════════════════════════════════════ */
+  .cp-print-img { display: block; }
+  canvas.cp-print-hide { display: none !important; }
+
+  /* 1쪽: 좌 112mm · 우 167mm 고정 — 그래프·표가 잘리지 않는다 */
+  #page2:not(:has(.cx-hero)) .p2-top-section { grid-template-columns: 112mm 167mm !important; column-gap: 6mm !important; min-height: 172mm !important; align-items: stretch !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col { display: flex !important; flex-direction: column !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col .p2-portfolio-wrap { flex: 1 1 auto !important; display: flex; flex-direction: column; justify-content: center; }
+  #page2:not(:has(.cx-hero)) .p2-right-col { display: flex !important; flex-direction: column !important; }
+  #page2:not(:has(.cx-hero)) .p2-right-col .p2-sim-wrap { flex: 1 1 auto !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; }
+
+  /* 그래프 칸 */
+  #page2:not(:has(.cx-hero)) .sim-line-chart-wrap { height: 35.5mm !important; max-height: 35.5mm !important; flex: none !important; width: 100% !important; overflow: hidden !important; }
+  #page2:not(:has(.cx-hero)) .cp-print-img.line { width: 100% !important; height: 100% !important; object-fit: fill; margin: 0 auto; }
+  #page2:not(:has(.cx-hero)) .donut-canvas-wrap .cp-print-img.donut { width: 100% !important; height: 100% !important; }
+
+  /* 표: 행을 낮춰 5행(1·3·5·7·10년)이 1쪽에 모두 들어가게 */
+  #page2:not(:has(.cx-hero)) .sim-table td { padding: 3px 7px !important; line-height: 1.25 !important; }
+  #page2:not(:has(.cx-hero)) .sim-table th { padding: 5px 7px !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td.sim-val-main { font-size: 13px !important; }
+
+  /* "적립식 투자의 특성" 안내: 세 칸으로 나란히 */
+  #page2:not(:has(.cx-hero)) .sim-accumulate-notice { padding: 6px 9px !important; margin: 4px 0 !important; gap: 8px !important; }
+  #page2:not(:has(.cx-hero)) .san-icon { display: none !important; }
+  #page2:not(:has(.cx-hero)) .san-title { font-size: 10px !important; margin-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .san-rows { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+  #page2:not(:has(.cx-hero)) .san-row { display: block !important; font-size: 8px !important; line-height: 1.35 !important; }
+  #page2:not(:has(.cx-hero)) .san-badge { display: inline-block !important; margin-bottom: 2px !important; font-size: 8px !important; }
+  #page2:not(:has(.cx-hero)) .sim-notice { margin: 3px 0 0 !important; font-size: 7.5px !important; }
+
+
+  /* 안전장치: 이미지로 바꾸지 못한 경우에도 그래프가 칸 밖으로 잘리지 않게 비율 유지하며 줄인다 */
+  #page2:not(:has(.cx-hero)) .sim-line-chart-wrap canvas:not(.cp-print-hide), #page2:not(:has(.cx-hero)) .donut-canvas-wrap canvas:not(.cp-print-hide) { max-width: 100% !important; height: auto !important; }
+
+
+  /* 1쪽 오른쪽 칸: 안쪽 블록이 눌려 잘리지 않게(스크롤바·잘림 방지) 각자 제 높이를 유지 */
+  #page2:not(:has(.cx-hero)) .p2-sim-wrap > * { flex: none !important; }
+  #page2:not(:has(.cx-hero)) .sim-table-wrap { overflow: visible !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td { padding: 2px 7px !important; }
+  #page2:not(:has(.cx-hero)) .sim-cards-row { margin-bottom: 4px !important; }
+  #page2:not(:has(.cx-hero)) .sim-card { padding: 4px 7px !important; }
+  #page2:not(:has(.cx-hero)) .sim-avg-rate-box { padding: 4px 12px !important; margin-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .sim-basis-row { margin-bottom: 2px !important; font-size: 7.5px !important; }
+
+
+  /* ── 1쪽 왼쪽: 포트폴리오 카드를 아래까지 채운다(도넛 키움, 도넛+목록을 카드 중앙에) ── */
+  #page2:not(:has(.cx-hero)) .p2-left-col .p2-portfolio-wrap { justify-content: flex-start !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col .portfolio-wrap-v2 { flex: 1 1 auto !important; align-items: center !important; }
+  #page2:not(:has(.cx-hero)) .donut-canvas-wrap { width: 112px !important; height: 112px !important; max-width: 112px !important; max-height: 112px !important; }
+  #page2:not(:has(.cx-hero)) .portfolio-item-v2, #page2:not(:has(.cx-hero)) .portfolio-item-v2 * { font-size: 10px !important; }
+
+  /* ── 2쪽: 펀드 상세 + 안내 박스를 키워 쪽을 채운다 (펀드 3개 이하면 크게, 많으면 원래 크기로 자동 축소) ── */
+  #page2:not(:has(.cx-hero)) .funds-section { min-height: 96mm !important; }
+  #page2:not(:has(.cx-hero)) .fund-detail-cards { zoom: 1.32; align-items: stretch !important; }
+  #page2:not(:has(.cx-hero)) .fund-detail-cards:has(> :nth-child(4)) { zoom: 1; }
+  #page2:not(:has(.cx-hero)) .fund-detail-cards:has(> :nth-child(7)) { zoom: .85; }
+  #page2:not(:has(.cx-hero)) .securities-section { min-height: 76mm !important; }
+  #page2:not(:has(.cx-hero)) .securities-section .securities-box { zoom: 1.18; }
+  #page2:not(:has(.cx-hero)) .page2-footer { margin-top: 3mm !important; }
+
+
+  /* 레벨UP "7년 전환 핵심 안내" 박스: 4칸 한 줄로 낮춰 1쪽 안에 들어오게 */
+  #page2:not(:has(.cx-hero)) .levelup-info-box { margin-top: 4px !important; }
+  #page2:not(:has(.cx-hero)) .levelup-info-header { padding: 4px 10px !important; font-size: 10px !important; }
+  #page2:not(:has(.cx-hero)) .levelup-info-grid { grid-template-columns: repeat(4, 1fr) !important; }
+  #page2:not(:has(.cx-hero)) .lui-item { padding: 4px 6px !important; gap: 5px !important; }
+  #page2:not(:has(.cx-hero)) .lui-icon { width: 20px !important; height: 20px !important; min-width: 20px !important; font-size: 10px !important; }
+  #page2:not(:has(.cx-hero)) .lui-title { font-size: 8.5px !important; }
+  #page2:not(:has(.cx-hero)) .lui-desc { font-size: 7px !important; line-height: 1.25 !important; }
+  #page2:not(:has(.cx-hero)) .levelup-info-footer { padding: 4px 8px !important; font-size: 7px !important; line-height: 1.35 !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td { line-height: 1.15 !important; }
+
+
+  /* 레벨UP: 왼쪽 "유족보상위로금" 카드는 인쇄용 아이보리(흰 글씨가 흰 바탕에 묻혀 안 보이던 문제) */
+  #page2:not(:has(.cx-hero)) .pf-levelup-death-card { background: #FBF3DC !important; border: 1px solid #C9A96A !important; padding: 10px 12px !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-icon-wrap { color: #B0341F !important; font-size: 18px !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-title { color: #5B4310 !important; font-size: 10.5px !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-desc { color: #14100A !important; font-size: 12.5px !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-sub { color: #7B6A3A !important; font-size: 9px !important; }
+  /* 레벨UP은 안내 박스가 추가되므로 하단 4카드(표와 같은 수치)를 접어 1쪽에 담는다 */
+  #page2:not(:has(.cx-hero)) .p2-sim-wrap:has(.levelup-info-box) .sim-cards-row { display: none !important; }
+  #page2:not(:has(.cx-hero)) .p2-sim-wrap:has(.levelup-info-box) .sim-basis-row { display: none !important; }
+
+
+  /* 안쪽 블록 사이는 일정 간격으로 쌓는다(가운데 흩어져 낭비되던 공백 제거) */
+  #page2:not(:has(.cx-hero)) .right-fill, #page2:not(:has(.cx-hero)) .p2-right-col .p2-sim-wrap { justify-content: flex-start !important; gap: 1.4mm !important; }
+  #page2:not(:has(.cx-hero)) .p2-sim-wrap:has(.levelup-info-box) .sim-line-chart-wrap { height: 34mm !important; max-height: 34mm !important; }
+
+
+  /* 왼쪽 컬럼이 길어지는 경우(레벨UP 카드 추가·펀드 4개 이상)는 종목 태그를 접고 도넛을 줄여 1쪽에 담는다 (종목은 2쪽 펀드 상세에 있다) */
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .pf-holding-tags,
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(4)) .pf-holding-tags { display: none !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .donut-canvas-wrap { width: 112px !important; height: 112px !important; max-width: 112px !important; max-height: 112px !important; }
+
+
+  /* 1쪽 블록은 쪽 사이에서 쪼개지지 않게 통째로 유지(쪼개지면 왼쪽 카드가 2쪽으로 밀리고 뒤 내용이 사라지는 것을 시험에서 확인) */
+  #page2:not(:has(.cx-hero)) .p2-top-section, #page2:not(:has(.cx-hero)) .p2-left-col, #page2:not(:has(.cx-hero)) .p2-right-col { break-inside: avoid !important; page-break-inside: avoid !important; }
+
+
+  /* 1쪽 상자는 한 장 높이로 고정 — 내용이 조금 커져도 통째로 다음 쪽으로 밀려 1쪽이 텅 비는 일이 없게 한다.
+     2026-09-28: 180mm → 181mm 로 1mm 만 늘림. 184mm 로 키웠더니 머리글(약 14mm)과 합쳐 인쇄영역 198mm 를 넘어 1쪽이 통째로 비어 시험에서 되돌림.
+     오른쪽 열은 블록 간격을 줄여 이 상자 안에 담는다(아래 gap 규칙) */
+  #page2:not(:has(.cx-hero)) .p2-top-section { height: 181mm !important; min-height: 0 !important; overflow: hidden !important; }
+
+
+  /* 레벨UP 왼쪽 컬럼: 카드·도넛을 줄여 1쪽 상자(182mm) 안에 들어오게 */
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .pf-levelup-death-card { padding: 6px 10px !important; margin-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .pf-ldb-sub { display: none !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .pf-levelup-death-inner { gap: 3px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .donut-canvas-wrap { width: 92px !important; height: 92px !important; max-width: 92px !important; max-height: 92px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.pf-levelup-death-card) .p2-portfolio-wrap { padding-top: 4px !important; padding-bottom: 4px !important; }
+
+
+  /* 표 머리·비고를 한 줄로(사업비 반영 배지가 줄을 늘려 표가 길어지는 것 방지) */
+  #page2:not(:has(.cx-hero)) .sim-table th { white-space: nowrap !important; padding: 4px 6px !important; }
+  #page2:not(:has(.cx-hero)) .sim-table th .expense-badge-th { display: inline-block !important; font-size: 6.5px !important; padding: 0 4px !important; margin: 0 0 0 3px !important; vertical-align: middle; }
+  #page2:not(:has(.cx-hero)) .sim-table td:last-child { font-size: 7px !important; white-space: nowrap !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td:last-child * { white-space: nowrap !important; font-size: 7px !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td { padding: 1.5px 7px !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td.sim-val-main { font-size: 12.5px !important; }
+
+
+  #page2:not(:has(.cx-hero)) .p2-profile-wrap { margin-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col .pf-card { margin-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col .p2-portfolio-wrap { padding-top: 3px !important; padding-bottom: 3px !important; }
+  #page2:not(:has(.cx-hero)) .portfolio-item-v2 { padding: 2px 6px !important; margin-bottom: 2px !important; }
+
+
+  /* 왼쪽 목록의 종목 태그는 3개까지만(줄바꿈으로 카드가 길어지는 것 방지 — 전체 종목은 2쪽 펀드 상세에 있다) */
+  #page2:not(:has(.cx-hero)) .p2-left-col .pf-holding-tags .pf-holding-tag:nth-child(n+4) { display: none !important; }
+
+
+  /* 펀드가 4개 이상이면 카드가 2줄 이상 → 안내 박스와 최소 높이를 줄여 2쪽 안에 담는다 */
+  #page2:not(:has(.cx-hero)):has(.fund-detail-cards > :nth-child(4)) .securities-section { min-height: 0 !important; }
+  #page2:not(:has(.cx-hero)):has(.fund-detail-cards > :nth-child(4)) .securities-section .securities-box { zoom: .98; }
+  #page2:not(:has(.cx-hero)):has(.fund-detail-cards > :nth-child(4)) .funds-section { min-height: 0 !important; }
+  #page2:not(:has(.cx-hero)):has(.fund-detail-cards > :nth-child(7)) .securities-section .securities-box { zoom: .85; }
+
+
+  /* 펀드 5개 이상: 왼쪽 목록을 촘촘하게 */
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(5)) .portfolio-item-v2 { padding: 1px 6px !important; margin-bottom: 1px !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(5)) .donut-canvas-wrap { width: 96px !important; height: 96px !important; max-width: 96px !important; max-height: 96px !important; }
+
+
+  /* 펀드 6개 이상: 도넛 칸(원래 50%)을 도넛 폭으로 줄이고 목록을 넓혀 종목명을 한 줄로 —
+     목록이 2줄씩 접혀 왼쪽 카드가 1쪽 상자(180mm)를 넘고, 넘친 아래쪽이 잘려 인쇄되던 문제 (2026-09-28 상무님: "하단부가 잘려서 인쇄되네") */
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(6)) .portfolio-donut-center { flex: none !important; width: auto !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(6)) .portfolio-list-v2 { flex: 1 1 0 !important; width: auto !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(6)) .pf-item-name { white-space: nowrap !important; }
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(6)) .portfolio-item-v2 { padding: 2px 6px !important; margin-bottom: 1.5px !important; }
+
+
+  /* 레벨UP + 펀드 5개 이상: 왼쪽이 넘치므로 유족보상위로금 카드는 접는다(같은 내용이 오른쪽 "7년 전환 핵심 안내"에 있다) */
+  #page2:not(:has(.cx-hero)) .p2-left-col:has(.portfolio-list-v2 > :nth-child(5)) .pf-levelup-death-card { display: none !important; }
+
+}
+
+/* =====================================================================
+   2026-10-07 인쇄 디자인 정비 — 상무님: "색깔이나 전체적으로 디자인해 주고, 잘리지 않게 정비"
+   ① 색: 블랙·아이보리 → 남색·흰색·연회색(화면과 같은 톤)  ② 인쇄물에 찍히면 안 되는 버튼·배지 숨김
+   ③ 잘림 방지: 왼쪽 목록 수익률·표의 "원"·오른쪽 카드 가장자리·그래프 오른쪽 끝
+   ===================================================================== */
+@media print {
+  /* ② 화면 전용 요소는 인쇄하지 않는다 */
+  #page2 .page2-header .back-btn, #page2 .page2-header .print-btn, #page2 .page2-header .logout-btn,
+  #page2 .page2-header .login-user-badge, #page2 .page2-header .cp-plan-badge, #page2 .page2-header .socialLinkWrap,
+  #page2 .page2-header .proposal-ai-tag, #page2 .page2-header .pwa-install-btn { display: none !important; }
+  #page2 .page2-header .header-inner { justify-content: center !important; }
+  #page2 .proposal-title-area { text-align: center !important; }
+
+  /* ① 색 */
+  #page2 .page2-header { background: #0F2347 !important; border-bottom: 2px solid #B8902F !important; }
+  #page2 .proposal-sub-title { color: #B7C4DD !important; }
+  #page2 .result-section, #page2 .p2-portfolio-wrap, #page2 .p2-sim-wrap, #page2 .pf-card { border-color: #E1E6EF !important; }
+  #page2 .section-title { border-bottom-color: #B8902F !important; }
+  #page2 .pf-card.pf-amount-row { background: #0F2347 !important; border-color: #16284A !important; }
+  #page2 .pf-card.pf-amount-row [class*="value"], #page2 .pf-card.pf-amount-row [class*="amount"] { color: #F0D79A !important; }
+  #page2 .pf-rg-header { background: #EEF1F7 !important; color: #4A5875 !important; }
+  #page2 .pf-rg-cell--accent { background: #F6EFD8 !important; }
+  #page2 .pf-sim-basis-card, #page2 .cross-fund-common-card { background: #EEF1F7 !important; border: 1px solid #E1E6EF !important; }
+  #page2 .securities-box, #page2 .cross-header-banner, #page2 .cross-winner-box { background: #0F2347 !important; border: 1px solid #16284A !important; }
+  #page2 .securities-box .sb-title, #page2 .securities-box h3 { color: #F0D79A !important; }
+  #page2 .page2-footer { background: #0F2347 !important; color: #B7C4DD !important; }
+  #page2 .page2-footer::before { background: #B8902F !important; }
+  #page2 th.cross-th-year { background: #0F2347 !important; }
+  #page2:not(:has(.cx-hero)) .pf-levelup-death-card { background: #EEF1F7 !important; border: 1px solid #CBD3E1 !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-icon-wrap { color: #B8902F !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-title { color: #4A5875 !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-desc { color: #13203A !important; }
+  #page2:not(:has(.cx-hero)) .pf-ldb-sub { color: #8190A8 !important; }
+
+  /* ③ 잘림 방지 — 1쪽 두 칸은 총 283mm(인쇄영역 285mm 안쪽)로 두어 오른쪽 테두리가 잘리지 않게 */
+  #page2:not(:has(.cx-hero)) .p2-top-section { grid-template-columns: 111mm 166mm !important; }
+  /* 왼쪽 펀드 목록: 이름은 한 줄로 줄이고(…), 비중·수익률 숫자는 항상 끝까지 보이게 */
+  #page2 .pf-item-top { display: flex !important; align-items: center !important; gap: 6px !important; min-width: 0 !important; }
+  #page2 .pf-item-left { flex: 1 1 0 !important; min-width: 0 !important; display: flex !important; align-items: center !important; gap: 6px !important; }
+  #page2 .pf-item-name { flex: 1 1 0 !important; min-width: 0 !important; }
+  #page2 .pf-item-name .fn-stack { display: flex !important; flex-direction: column !important; min-width: 0 !important; max-width: 100% !important; }
+  #page2:not(:has(.cx-hero)) .portfolio-item-v2 .fn-top { font-size: 9px !important; font-weight: 800 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+  #page2:not(:has(.cx-hero)) .portfolio-item-v2 .fn-sub { font-size: 8px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+  #page2 .pf-item-ratio, #page2 .pf-item-ret { flex: none !important; white-space: nowrap !important; }
+  #page2 .pf-item-ratio { min-width: 2.4em !important; text-align: right !important; }
+  #page2 .pf-item-ret { min-width: 3.9em !important; text-align: right !important; }
+  /* 오른쪽 표: 금액은 한 줄(원 글자가 아래로 떨어지지 않게), 첫 칸만 줄바꿈 허용 */
+  #page2:not(:has(.cx-hero)) .sim-table td:not(:first-child) { white-space: nowrap !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td.sim-val-main { font-size: 11.5px !important; }
+  #page2:not(:has(.cx-hero)) .sim-table td:first-child { min-width: 21mm !important; }
+}
+@media print {
+  #page2 .pf-item-ret { min-width: 5em !important; padding-right: 2px !important; }
+  #page2 .pf-item-ratio { min-width: 2.6em !important; }
+}
+@media print {
+  /* 이름 | 비중 | 수익률 세 칸을 고정 폭으로 — 이름이 길어도 숫자 칸이 밀려 잘리지 않는다 */
+  #page2 .pf-item-top { display: grid !important; grid-template-columns: minmax(0, 1fr) 2.8em 5.4em !important; align-items: center !important; column-gap: 6px !important; }
+  #page2 .pf-item-left { min-width: 0 !important; overflow: hidden !important; }
+  #page2 .pf-item-ratio, #page2 .pf-item-ret { min-width: 0 !important; text-align: right !important; }
+}
+@media print {
+  #page2 .pf-item-top { padding-right: 10px !important; }
+}
+
+/* 2026-10-07 상무님: 인쇄 2쪽(편입 펀드 상세정보 + 변액보험 안내 박스)은 색을 옛 방식(블랙·골드·아이보리)으로 — 펀드 이름 표기(대표 종목 위·펀드명 아래)는 유지 */
+@media print {
+  #page2 .funds-section, #page2 .securities-section { border-color: #E2D9C2 !important; }
+  #page2 .funds-section .section-title, #page2 .securities-section .section-title { border-bottom-color: #C9A96A !important; }
+  #page2 .securities-box { background: #14130F !important; border: 1px solid #8E7448 !important; color: #E6CC92 !important; }
+  #page2 .page2-footer { background: #14130F !important; color: #D9C79B !important; }
+  #page2 .page2-footer::before { background: #C9A96A !important; }
+}
