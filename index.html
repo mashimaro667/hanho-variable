@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>한호 변액설계 | 한호자산연구소</title>
+<!-- 한호 변액설계 1.0.0 (2026-11-13, 개발팀 지안) — consultingmoki.co.kr '변액을더하다'의 기능 구성을 참고해 새로 작성. 원본 코드·문구·자료는 쓰지 않음 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--navy:#0C2340;--navy2:#16345C;--gold:#C9A24B;--gold2:#E7CF8E;--bg:#F5F6F9;--line:#E2E6EE;--ink:#1B2430;--sub:#6B7686;--up:#C0392B;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;word-break:keep-all}
+a{color:inherit}
+header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;font-size:19px;letter-spacing:-.3px}
+.logo b{color:var(--gold)}
+.logo small{font-weight:400;font-size:12px;color:#B8C3D6;margin-left:8px}
+.nav nav a{margin-left:22px;font-size:14px;text-decoration:none;color:#D9E1EE}
+.nav nav a:hover{color:var(--gold2)}
+.hero{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:64px 0 72px}
+.hero .tag{display:inline-block;border:1px solid var(--gold);color:var(--gold2);font-size:13px;padding:4px 12px;border-radius:20px}
+.hero h1{font-size:40px;line-height:1.3;margin:18px 0 14px;letter-spacing:-.8px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{color:#C9D3E3;font-size:17px;max-width:640px}
+.steps{display:flex;gap:10px;margin:28px 0 22px;flex-wrap:wrap}
+.steps span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:9px 16px;border-radius:10px;font-size:14px}
+.steps span b{color:var(--gold);margin-right:6px}
+.btn{display:inline-block;border:0;cursor:pointer;font-family:inherit;font-weight:700;border-radius:10px;padding:13px 24px;font-size:15px;text-decoration:none}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.gold:hover{background:var(--gold2)}
+.btn.line{background:#fff;color:var(--navy);border:1px solid var(--line)}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.sm{padding:8px 14px;font-size:13px}
+.note{font-size:12.5px;color:#9FB0C8;margin-top:16px}
+section.blk{padding:60px 0}
+.eyebrow{color:var(--gold);font-weight:800;font-size:13px;letter-spacing:2px}
+h2{font-size:28px;margin:6px 0 10px;letter-spacing:-.5px}
+.lead{color:var(--sub);margin-bottom:28px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+.card .no{color:var(--gold);font-weight:800;font-size:22px}
+.card h3{font-size:18px;margin:6px 0 8px}
+.card p{color:var(--sub);font-size:14.5px}
+/* 설계 화면 */
+#app{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid2{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+.panel h3{font-size:16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.panel h3 .n{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;align-items:center;justify-content:center;margin-right:8px}
+label{display:block;font-size:13px;color:var(--sub);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:15px;background:#fff}
+input:focus,select:focus{outline:2px solid var(--gold2);border-color:var(--gold)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:#fff;padding:9px;font:inherit;font-size:14px;cursor:pointer;color:var(--sub)}
+.seg button.on{background:var(--navy);color:#fff;font-weight:700}
+.fund{border-top:1px dashed var(--line);padding:12px 0}
+.fund:first-child{border-top:0}
+.fund .top{display:flex;justify-content:space-between;font-size:14px}
+.fund .top b{font-weight:700}
+.fund .meta{font-size:12px;color:var(--sub)}
+.fund .w{font-weight:800;color:var(--navy);min-width:46px;text-align:right}
+input[type=range]{padding:0;border:0;accent-color:var(--navy);height:24px}
+.sum{display:flex;justify-content:space-between;font-weight:700;padding-top:10px;border-top:1px solid var(--line);margin-top:6px}
+.sum.bad span:last-child{color:var(--up)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--bg);border-radius:12px;padding:14px}
+.kpi .k{font-size:12.5px;color:var(--sub)}
+.kpi .v{font-size:20px;font-weight:800;color:var(--navy);margin-top:2px}
+.kpi .v.g{color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}
+th{background:var(--bg);color:var(--sub);font-weight:600}
+th:first-child,td:first-child{text-align:left}
+.chartbox{height:320px}
+.warn{background:#FFF8E6;border:1px solid #F0DDA8;color:#7A5A12;border-radius:10px;padding:12px 14px;font-size:13px}
+.fundedit td,.fundedit th{padding:6px 4px}
+.fundedit input{padding:6px 8px;font-size:13.5px}
+.x{background:none;border:0;color:var(--up);cursor:pointer;font-size:16px}
+footer{background:var(--navy);color:#9FB0C8;font-size:13px;padding:30px 0}
+footer b{color:#fff}
+dialog{border:0;border-radius:14px;padding:0;max-width:760px;width:94%}
+dialog::backdrop{background:rgba(12,35,64,.55)}
+.dlg{padding:22px}
+.dlg h3{margin-bottom:6px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:30px}.nav nav{display:none}}
+
+/* 제안서 (인쇄 전용) */
+#proposal{display:none}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body>*:not(#proposal){display:none!important}
+  #proposal{display:block}
+  .pg{width:210mm;height:297mm;padding:16mm 15mm;page-break-after:always;position:relative;overflow:hidden}
+  .pg:last-child{page-break-after:auto}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+.pg .phead{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--navy);padding-bottom:8px}
+.pg .phead .t{font-size:24px;font-weight:800;color:var(--navy)}
+.pg .phead .s{font-size:11px;color:var(--sub);text-align:right}
+.pg .band{background:var(--navy);color:#fff;border-radius:10px;padding:14px 18px;margin:16px 0;display:flex;justify-content:space-between}
+.pg .band b{color:var(--gold2);font-size:20px}
+.pg h4{font-size:15px;color:var(--navy);margin:16px 0 8px;border-left:4px solid var(--gold);padding-left:8px}
+.pg table{font-size:12.5px}
+.pg .pfoot{position:absolute;left:15mm;right:15mm;bottom:12mm;font-size:9.5px;color:var(--sub);border-top:1px solid var(--line);padding-top:6px}
+.pg img{max-width:100%}
+.pg .two{display:grid;grid-template-columns:60mm 1fr;gap:8mm;align-items:center}
+</style>
+</head>
+<body>
+
+<header><div class="wrap nav">
+  <div class="logo"><b>韓湖</b> 한호 변액설계<small>한호자산연구소</small></div>
+  <nav><a href="#service">서비스</a><a href="#how">이용 방법</a><a href="#app">설계 시작</a></nav>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <span class="tag">보험설계사용 · 변액 적립금 시뮬레이션</span>
+  <h1>고객의 <em>10년 뒤</em>를<br>상담 자리에서 함께 그려 보세요</h1>
+  <p>펀드 비율을 정하면 3·5·7·10년 예상 적립금이 그래프와 숫자로 바로 나오고, 고객 이름이 들어간 A4 제안서 2장으로 인쇄됩니다.</p>
+  <div class="steps"><span><b>1</b>고객·납입금 입력</span><span><b>2</b>펀드 비율 설계</span><span><b>3</b>제안서 2장 인쇄</span></div>
+  <a class="btn gold" href="#app">설계 시작하기</a>
+  <p class="note">※ 입력한 과거 수익률을 바탕으로 한 참고용 계산이며, 미래 수익을 보장하지 않습니다.</p>
+</div></div>
+
+<section class="blk" id="service"><div class="wrap">
+  <div class="eyebrow">SERVICE</div>
+  <h2>고객 앞에서 바로 보여 주는 변액 설계</h2>
+  <p class="lead">계산은 모두 이 화면 안에서 끝나고, 고객 정보는 어디로도 보내지 않습니다.</p>
+  <div class="cards">
+    <div class="card"><div class="no">01</div><h3>추천 포트폴리오</h3><p>펀드별 연평균 수익률과 변동성을 함께 따져 안정형·균형형·성장형 비율을 자동으로 찾아 줍니다.</p></div>
+    <div class="card"><div class="no">02</div><h3>3·5·7·10년 적립금</h3><p>납입 원금, 사업비를 뺀 예상 적립금을 낮게·기준·높게 세 갈래로 보여 줍니다.</p></div>
+    <div class="card"><div class="no">03</div><h3>고객 맞춤 제안서</h3><p>고객 이름이 들어간 A4 두 장을 바로 인쇄하거나 PDF로 저장합니다.</p></div>
+  </div>
+</div></section>
+
+<section class="blk" id="how" style="padding-top:0"><div class="wrap">
+  <div class="eyebrow">HOW IT WORKS</div>
+  <h2>세 걸음이면 제안서까지</h2>
+  <div class="cards">
+    <div class="card"><div class="no">1</div><h3>고객·금액 입력</h3><p>이름, 나이, 월 납입금, 납입 기간을 넣습니다.</p></div>
+    <div class="card"><div class="no">2</div><h3>펀드 비율 설계</h3><p>추천 버튼을 누르거나 막대를 움직여 직접 정합니다.</p></div>
+    <div class="card"><div class="no">3</div><h3>제안서 인쇄</h3><p>그래프와 표가 든 A4 두 장이 바로 나옵니다.</p></div>
+  </div>
+</div></section>
+
+<section class="blk" id="app"><div class="wrap">
+  <div class="eyebrow">DESIGN</div>
+  <h2>변액 설계</h2>
+  <p class="lead">펀드 수익률은 상품 공시 자료를 보고 <b>[펀드 자료 관리]</b>에서 넣어 주세요. 넣은 값은 이 기기에 저장됩니다.</p>
+  <div class="grid2">
+    <div>
+      <div class="panel">
+        <h3><span><span class="n">1</span>고객·납입</span></h3>
+        <div class="row2">
+          <div><label>고객 이름</label><input id="cName" placeholder="홍길동"></div>
+          <div><label>나이</label><input id="cAge" type="number" min="0" max="100" placeholder="40"></div>
+        </div>
+        <label>상품명 (제안서 표기)</label><input id="pName" placeholder="예: ○○ 변액적립보험">
+        <div class="row2">
+          <div><label>월 납입금 (만원)</label><input id="pay" type="number" min="1" value="50"></div>
+          <div><label>납입 기간 (년)</label><select id="payY"><option>3</option><option>5</option><option selected>7</option><option>10</option><option>12</option><option>15</option><option>20</option></select></div>
+        </div>
+        <label>사업비·수수료 (납입보험료 대비 %, 약관·설계서 기준)</label><input id="fee" type="number" min="0" max="30" step="0.1" value="0">
+      </div>
+      <div class="panel">
+        <h3><span><span class="n">2</span>펀드 비율</span><button class="btn line sm" onclick="openFunds()">펀드 자료 관리</button></h3>
+        <label>추천 성향</label>
+        <div class="seg" id="seg"><button data-r="safe">안정형</button><button data-r="mid" class="on">균형형</button><button data-r="grow">성장형</button></div>
+        <button class="btn navy sm" style="width:100%;margin:12px 0 4px" onclick="recommend()">추천 비율 적용</button>
+        <div id="funds"></div>
+        <div class="sum" id="sum"><span>합계</span><span>0%</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="kpis">
+        <div class="kpi"><div class="k">총 납입 원금</div><div class="v" id="kPrin">-</div></div>
+        <div class="kpi"><div class="k">포트폴리오 기대수익률(연)</div><div class="v" id="kRet">-</div></div>
+        <div class="kpi"><div class="k">예상 변동성(연)</div><div class="v" id="kVol">-</div></div>
+        <div class="kpi"><div class="k">10년 시점 예상 적립금</div><div class="v g" id="k10">-</div></div>
+      </div>
+      <div class="panel"><h3>예상 적립금 추이</h3><div class="chartbox"><canvas id="chart"></canvas></div></div>
+      <div class="panel"><h3>시점별 예상 적립금 (만원)</h3><table id="tbl"></table></div>
+      <div class="warn" id="warnBox">펀드 자료가 아직 예시 값입니다. 실제 펀드 공시 수익률로 바꾼 뒤 고객에게 보여 주세요.</div>
+      <div style="text-align:right;margin-top:16px"><button class="btn gold" onclick="printProposal()">제안서 2장 인쇄 / PDF 저장</button></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <b>한호자산연구소</b> · 한호 변액설계 1.0.0<br>
+  보험설계사 상담 보조용 계산 화면입니다. 과거 수익률을 바탕으로 한 참고용 시뮬레이션이며 미래 수익을 보장하지 않습니다. 변액보험은 운용 실적에 따라 원금 손실이 생길 수 있고, 실제 적립금·해지환급금은 상품 설계서와 약관을 따릅니다.
+</div></footer>
+
+<dialog id="dlg"><div class="dlg">
+  <h3>펀드 자료 관리</h3>
+  <p style="font-size:13px;color:var(--sub);margin-bottom:12px">상품 공시실의 펀드별 연평균 수익률(예: 최근 5년)과 변동성(연 표준편차)을 넣습니다. 변동성을 모르면 비워 두세요(주식형 18%, 채권형 5%, 그 밖 10%로 잡습니다).</p>
+  <table class="fundedit" id="fTbl"></table>
+  <div style="display:flex;gap:8px;justify-content:space-between;margin-top:14px">
+    <div><button class="btn line sm" onclick="addFund()">+ 펀드 추가</button> <button class="btn line sm" onclick="resetFunds()">예시로 되돌리기</button></div>
+    <div><button class="btn line sm" onclick="dlg.close()">취소</button> <button class="btn navy sm" onclick="saveFunds()">저장</button></div>
+  </div>
+</div></dialog>
+
+<div id="proposal"></div>
+
+<script>
+const KEY='hanho.vl.funds.v1';
+// 예시 값: 실제 상품 수익률이 아님. 사용 전 공시 자료로 바꾼다.
+const SAMPLE=[
+  {name:'(예시) 미국 주식형',type:'주식',ret:9,vol:18,sample:1},
+  {name:'(예시) 글로벌 주식형',type:'주식',ret:7,vol:16,sample:1},
+  {name:'(예시) 국내 주식형',type:'주식',ret:5,vol:20,sample:1},
+  {name:'(예시) 혼합형',type:'혼합',ret:4.5,vol:9,sample:1},
+  {name:'(예시) 채권형',type:'채권',ret:3,vol:4,sample:1},
+  {name:'(예시) 단기금융(MMF)형',type:'채권',ret:2.5,vol:0.5,sample:1}
+];
+const DEFVOL={주식:18,채권:5,혼합:10,기타:10};
+const RHO=0.5;          // 펀드 간 상관계수 가정 (변동성 계산용)
+const CHECK=[3,5,7,10,15,20];
+let funds=load(), weights=[], chart, risk='mid';
+
+function load(){try{const f=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(f)&&f.length)return f}catch(e){}return SAMPLE.map(x=>({...x}))}
+function vol(f){return (f.vol===''||f.vol==null||isNaN(f.vol))?DEFVOL[f.type]||10:+f.vol}
+const $=id=>document.getElementById(id);
+const won=v=>Math.round(v).toLocaleString('ko-KR');
+const eok=v=>v>=10000?(v/10000).toFixed(2).replace(/\.?0+$/,'')+'억':won(v)+'만';
+
+function portStats(w){
+  let r=0,v2=0;
+  w.forEach((wi,i)=>{r+=wi*funds[i].ret;w.forEach((wj,j)=>{v2+=wi*wj*vol(funds[i])*vol(funds[j])*(i===j?1:RHO)})});
+  return {r,v:Math.sqrt(v2)};
+}
+// 월 납입 P(만원), 납입 nPay년, 시점 t년의 적립금. 사업비는 매 납입에서 뺌, 납입 끝난 뒤엔 그대로 굴림
+function fv(P,nPay,t,annual,fee){
+  const m=Math.pow(1+annual/100,1/12)-1, net=P*(1-fee/100);let bal=0;
+  for(let k=1;k<=t*12;k++){if(k<=nPay*12)bal+=net;bal*=1+m}
+  return bal;
+}
+
+function renderFunds(){
+  if(weights.length!==funds.length){weights=funds.map(()=>Math.floor(100/funds.length/5)*5);weights[0]+=100-weights.reduce((a,b)=>a+b,0)}
+  $('funds').innerHTML=funds.map((f,i)=>`<div class="fund"><div class="top"><span><b>${esc(f.name)}</b><div class="meta">연 ${f.ret}% · 변동성 ${vol(f)}%</div></span><span class="w" id="w${i}">${weights[i]}%</span></div>
+  <input type="range" min="0" max="100" step="5" value="${weights[i]}" oninput="weights[${i}]=+this.value;$('w${i}').textContent=this.value+'%';calc()"></div>`).join('');
+  $('warnBox').style.display=funds.some(f=>f.sample)?'block':'none';
+  calc();
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function recommend(){
+  // 5% 단위 무작위 조합 중 성향별 점수가 가장 높은 비율 (안정: 변동성 낮게, 성장: 수익률 높게)
+  const lam={safe:0.12,mid:0.04,grow:0.01}[risk], n=funds.length;let best=null,bs=-1e9;
+  for(let s=0;s<6000;s++){
+    const w=new Array(n).fill(0);let left=20;
+    while(left>0){w[Math.floor(Math.random()*n)]++;left--}
+    if(w.some(x=>x>12))continue; // 한 펀드 60% 넘지 않게
+    const ww=w.map(x=>x*5),st=portStats(ww.map(x=>x/100)),sc=st.r-lam*st.v*st.v;
+    if(sc>bs){bs=sc;best=ww}
+  }
+  if(best){weights=best;renderFunds()}
+}
+
+function calc(){
+  const total=weights.reduce((a,b)=>a+b,0);
+  $('sum').innerHTML=`<span>합계</span><span>${total}%${total!==100?' (100%로 맞춰 주세요)':''}</span>`;
+  $('sum').classList.toggle('bad',total!==100);
+  const P=+$('pay').value||0,nPay=+$('payY').value,fee=+$('fee').value||0;
+  const w=weights.map(x=>x/(total||1)),st=portStats(w);
+  const lo=st.r-st.v/2,hi=st.r+st.v/2;
+  $('kPrin').textContent=eok(P*12*nPay)+'원';
+  $('kRet').textContent=st.r.toFixed(2)+'%';
+  $('kVol').textContent=st.v.toFixed(1)+'%';
+  $('k10').textContent=eok(fv(P,nPay,10,st.r,fee))+'원';
+  const rows=CHECK.map(t=>({t,prin:P*12*Math.min(t,nPay),lo:fv(P,nPay,t,lo,fee),mid:fv(P,nPay,t,st.r,fee),hi:fv(P,nPay,t,hi,fee)}));
+  window._last={P,nPay,fee,st,lo,hi,rows,w,total};
+  $('tbl').innerHTML='<tr><th>경과</th><th>납입 원금</th><th>낮게 ('+lo.toFixed(1)+'%)</th><th>기준 ('+st.r.toFixed(1)+'%)</th><th>높게 ('+hi.toFixed(1)+'%)</th><th>기준 수익률</th></tr>'+
+    rows.map(r=>`<tr><td>${r.t}년</td><td>${won(r.prin)}</td><td>${won(r.lo)}</td><td><b>${won(r.mid)}</b></td><td>${won(r.hi)}</td><td>${r.prin?((r.mid/r.prin-1)*100).toFixed(1)+'%':'-'}</td></tr>`).join('');
+  drawChart(P,nPay,fee,st.r,lo,hi);
+}
+
+function series(P,nPay,fee,rate){return Array.from({length:21},(_,t)=>Math.round(fv(P,nPay,t,rate,fee)))}
+function drawChart(P,nPay,fee,r,lo,hi){
+  const labels=Array.from({length:21},(_,t)=>t+'년');
+  const data={labels,datasets:[
+    {label:'높게',data:series(P,nPay,fee,hi),borderColor:'rgba(201,162,75,.6)',borderDash:[5,4],pointRadius:0,fill:false},
+    {label:'기준',data:series(P,nPay,fee,r),borderColor:'#C9A24B',backgroundColor:'rgba(201,162,75,.12)',borderWidth:3,pointRadius:0,fill:'origin'},
+    {label:'낮게',data:series(P,nPay,fee,lo),borderColor:'rgba(22,52,92,.5)',borderDash:[5,4],pointRadius:0,fill:false},
+    {label:'납입 원금',data:labels.map((_,t)=>P*12*Math.min(t,nPay)),borderColor:'#16345C',borderWidth:2,pointRadius:0,stepped:false,fill:false}
+  ]};
+  const opt={responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+won(c.parsed.y)+'만원'}}},
+    scales:{y:{ticks:{callback:v=>eok(v)}}}};
+  if(chart){chart.data=data;chart.update()}else chart=new Chart($('chart'),{type:'line',data,options:opt});
+}
+
+// 펀드 자료 관리
+const dlg=$('dlg');let draft=[];
+function openFunds(){draft=funds.map(f=>({...f}));drawEdit();dlg.showModal()}
+function drawEdit(){
+  $('fTbl').innerHTML='<tr><th>펀드 이름</th><th>유형</th><th>연평균 수익률 %</th><th>변동성 %</th><th></th></tr>'+draft.map((f,i)=>`<tr>
+  <td><input value="${esc(f.name)}" oninput="draft[${i}].name=this.value;draft[${i}].sample=0"></td>
+  <td><select onchange="draft[${i}].type=this.value">${['주식','채권','혼합','기타'].map(t=>`<option${t===f.type?' selected':''}>${t}</option>`).join('')}</select></td>
+  <td><input type="number" step="0.01" value="${f.ret}" oninput="draft[${i}].ret=+this.value;draft[${i}].sample=0"></td>
+  <td><input type="number" step="0.1" value="${f.vol??''}" oninput="draft[${i}].vol=this.value===''?'':+this.value"></td>
+  <td><button class="x" onclick="draft.splice(${i},1);drawEdit()">✕</button></td></tr>`).join('');
+}
+function addFund(){draft.push({name:'새 펀드',type:'주식',ret:0,vol:'',sample:0});drawEdit()}
+function resetFunds(){draft=SAMPLE.map(x=>({...x}));drawEdit()}
+function saveFunds(){
+  draft=draft.filter(f=>f.name.trim());if(!draft.length){alert('펀드를 하나 이상 넣어 주세요.');return}
+  funds=draft;localStorage.setItem(KEY,JSON.stringify(funds));weights=[];dlg.close();renderFunds();
+}
+
+// 제안서 2장
+function printProposal(){
+  const L=window._last;if(L.total!==100){alert('펀드 비율 합계를 100%로 맞춰 주세요.');return}
+  const name=$('cName').value.trim()||'고객',age=$('cAge').value,prod=$('pName').value.trim()||'변액보험',today=new Date().toLocaleDateString('ko-KR');
+  const img=chart.toBase64Image();
+  const pie=pieImage(L.w);
+  const used=funds.map((f,i)=>({f,w:weights[i]})).filter(x=>x.w>0);
+  const foot=`본 자료는 입력한 과거 수익률을 바탕으로 계산한 참고용 시뮬레이션이며 미래 수익을 보장하지 않습니다. 변액보험은 펀드 운용 실적에 따라 원금 손실이 생길 수 있고, 예금자보호 대상 여부·실제 적립금·해지환급금은 상품 설계서와 약관을 따릅니다. 낮게/높게는 기준 수익률에서 예상 변동성의 절반을 빼고 더한 값입니다.${L.fee?` 사업비 ${L.fee}%를 매 납입에서 뺀 금액입니다.`:' 사업비를 반영하지 않은 금액이며 실제 적립금은 이보다 적습니다.'} · 한호자산연구소 · ${today}`;
+  $('proposal').innerHTML=`
+  <div class="pg">
+    <div class="phead"><div class="t">${esc(name)}님 변액 설계 제안서</div><div class="s">${esc(prod)}<br>${today} · 한호자산연구소</div></div>
+    <div class="band"><span>월 ${won(L.P)}만원 × ${L.nPay}년 납입 · 총 원금 ${eok(L.P*12*L.nPay)}원${age?` · ${esc(age)}세`:''}</span><span>10년 시점 기준 예상 <b>${eok(L.rows.find(r=>r.t===10).mid)}원</b></span></div>
+    <h4>펀드 구성</h4>
+    <div class="two"><img src="${pie}"><table><tr><th>펀드</th><th>유형</th><th>비율</th><th>연평균 수익률</th></tr>
+      ${used.map(x=>`<tr><td>${esc(x.f.name)}</td><td>${x.f.type}</td><td><b>${x.w}%</b></td><td>${x.f.ret}%</td></tr>`).join('')}
+      <tr><td><b>포트폴리오</b></td><td></td><td>100%</td><td><b>${L.st.r.toFixed(2)}%</b></td></tr></table></div>
+    <h4>설계 요약</h4>
+    <table><tr><th>항목</th><th>내용</th></tr>
+      <tr><td>기대수익률(연, 가중평균)</td><td>${L.st.r.toFixed(2)}%</td></tr>
+      <tr><td>예상 변동성(연)</td><td>${L.st.v.toFixed(1)}%</td></tr>
+      <tr><td>납입 방식</td><td>월 ${won(L.P)}만원, ${L.nPay}년 납입 후 거치</td></tr>
+      <tr><td>사업비 반영</td><td>${L.fee?L.fee+'% (납입보험료 대비)':'반영 안 함'}</td></tr></table>
+    <div class="pfoot">${foot}</div>
+  </div>
+  <div class="pg">
+    <div class="phead"><div class="t">예상 적립금 추이</div><div class="s">${esc(name)}님 · ${esc(prod)}</div></div>
+    <img src="${img}" style="margin:14px 0;height:95mm;width:100%;object-fit:contain">
+    <h4>시점별 예상 적립금 (만원)</h4>
+    <table><tr><th>경과</th><th>납입 원금</th><th>낮게 (${L.lo.toFixed(1)}%)</th><th>기준 (${L.st.r.toFixed(1)}%)</th><th>높게 (${L.hi.toFixed(1)}%)</th></tr>
+      ${L.rows.map(r=>`<tr><td>${r.t}년</td><td>${won(r.prin)}</td><td>${won(r.lo)}</td><td><b>${won(r.mid)}</b></td><td>${won(r.hi)}</td></tr>`).join('')}</table>
+    <h4>꼭 알아 두실 점</h4>
+    <table><tr><td style="text-align:left;line-height:1.7">· 수익률은 펀드 운용 실적에 따라 달라지며, 위 숫자는 확정된 금액이 아닙니다.<br>· 납입 초기에 해지하면 해지환급금이 납입 원금보다 적을 수 있습니다.<br>· 정확한 적립금·환급금·세제 요건은 상품 설계서와 약관으로 확인해 주세요.</td></tr></table>
+    <div class="pfoot">${foot}</div>
+  </div>`;
+  setTimeout(()=>window.print(),300);
+}
+function pieImage(w){
+  const c=document.createElement('canvas');c.width=c.height=400;const g=c.getContext('2d');
+  const col=['#0C2340','#C9A24B','#3D6A9E','#E7CF8E','#7F97B8','#8C6D2C','#B8C3D6','#5A4A2A'];let a=-Math.PI/2;
+  w.forEach((x,i)=>{if(!x)return;g.beginPath();g.moveTo(200,200);g.arc(200,200,190,a,a+x*2*Math.PI);g.closePath();g.fillStyle=col[i%col.length];g.fill();a+=x*2*Math.PI});
+  g.beginPath();g.arc(200,200,95,0,2*Math.PI);g.fillStyle='#fff';g.fill();
+  return c.toDataURL();
+}
+
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#seg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');risk=b.dataset.r});
+['pay','payY','fee'].forEach(id=>$(id).addEventListener('input',calc));
+renderFunds();
+</script>
+</body>
+</html>
