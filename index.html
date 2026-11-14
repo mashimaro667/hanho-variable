@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/cp-pro.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-light.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-print.css?v=2.0.0">
-<link rel="stylesheet" href="css/hanho-theme.css?v=2.0.0">
+<link rel="stylesheet" href="css/hanho-theme.css?v=2.1.1">
 </head>
 <body class="hanho">
 <div id="page1" class="page active">
@@ -89,7 +89,7 @@
 
               <!-- 모키적립식 -->
               <label class="etab etab-standard" title="모키적립식 사업비 반영">
-                <input type="checkbox" id="expenseCheck" onchange="onExpenseGroupChange('standard')" />
+                <input type="checkbox" id="expenseCheck" checked onchange="onExpenseGroupChange('standard')" />
                 <span class="etab-icon"><i class="fa-solid fa-seedling"></i></span>
                 <span class="etab-text">모키적립식</span>
               </label>
@@ -261,22 +261,17 @@
       </div>
 
       <div class="preview-card expected-return-card">
-        <div class="preview-title"><i class="fa-solid fa-percent"></i> 가중평균 예상수익률</div>
-        <div class="return-grid">
-          <div class="return-item">
-            <div class="return-label">1년 실적</div>
-            <div class="return-value" id="avgReturn1y">-</div>
-          </div>
-          <div class="return-item">
-            <div class="return-label">3년 누적 실적</div>
-            <div class="return-value" id="avgReturn3y">-</div>
-          </div>
-          <div class="return-item">
-            <div class="return-label">적용 기대수익률(연)</div>
-            <div class="return-value" id="avgReturn5y">-</div>
-          </div>
+        <div class="preview-title"><i class="fa-solid fa-calculator"></i> 적립금 계산에 쓰는 수익률</div>
+        <button type="button" class="hh-expect-main" onclick="document.getElementById('expectDetail').classList.toggle('open')">
+          <span>기대 연수익률</span><b class="return-value" id="avgReturn5y">-</b><small>펀드별 내역 보기 ▾</small>
+        </button>
+        <div id="expectDetail" class="hh-expect-detail"></div>
+        <div class="hh-past-title">지난 실적 (참고용 · 계산에 쓰지 않음)</div>
+        <div class="return-grid hh-past">
+          <div class="return-item"><div class="return-label">지난 1년</div><div class="return-value" id="avgReturn1y">-</div></div>
+          <div class="return-item"><div class="return-label">지난 3년 누적</div><div class="return-value" id="avgReturn3y">-</div></div>
         </div>
-        <p class="return-notice">※ 1년·3년은 과거 실적입니다. 적립액은 펀드별 기대수익률(최근 3년·설정 후 연환산·유형별 상한 중 낮은 값)로 계산하며 미래 수익을 보장하지 않습니다</p>
+        <p class="return-notice">※ 기대 연수익률은 펀드마다 최근 3년·설정 후 연환산·유형별 상한(주식형 7%) 중 낮은 값을 비중대로 섞은 값입니다. 미래 수익을 보장하지 않습니다</p>
       </div>
 
       <div id="expenseBannerSide" class="exp-banner exp-side off"></div>
@@ -411,8 +406,8 @@
 <script src="js/fund-latest.js?v=2.0.0"></script>
 <script src="js/fund-merge.js?v=2.0.0"></script>
 <script src="js/config.js?v=2.0.0"></script>
-<script src="js/main.v18.js?v=2.1.0"></script>
-<script src="js/hanho-calc.js?v=2.1.0"></script>
+<script src="js/main.v18.js?v=2.1.1"></script>
+<script src="js/hanho-calc.js?v=2.1.1"></script>
 <script src="js/cp-expense.js?v=2.0.0"></script>
 <script src="js/cp-print.js?v=2.0.0"></script>
 <script>document.getElementById('hhToday').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});</script>

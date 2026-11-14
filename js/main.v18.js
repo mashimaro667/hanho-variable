@@ -838,6 +838,15 @@ function updatePreview() {
   // 한호 2.1.0: 3년 누적을 5년으로 늘린 추정 대신, 펀드별 기대수익률 가중평균(연)을 보여 준다
   const avg5y = hanhoPortfolioRate(hanhoWeightsFromDom()) * 100;
 
+  // 한호 2.1.1: 기대수익률 펀드별 내역
+  const _ed = document.getElementById("expectDetail");
+  if (_ed) {
+    const _w = hanhoWeightsFromDom();
+    _ed.innerHTML = '<table><tr><th>펀드</th><th>비중</th><th>지난 1년</th><th>기대(연)</th></tr>' +
+      FUND_DATA.filter(f => _w[f.id] > 0).map(f => { const x = hanhoFundRate(f);
+        return `<tr><td>${f.name}</td><td>${_w[f.id]}%</td><td>${f.returns.y1 >= 0 ? '+' : ''}${f.returns.y1.toFixed(2)}%</td><td><b>${x.rate.toFixed(1)}%</b><br><small>${x.by === '상한' ? '유형 상한' : x.by}</small></td></tr>`; }).join('') +
+      `<tr class="sum"><td>비중대로 섞으면</td><td>100%</td><td>${(avg1y >= 0 ? '+' : '') + avg1y.toFixed(2)}%</td><td><b>${avg5y.toFixed(2)}%</b></td></tr></table>`;
+  }
   const r1El = document.getElementById("avgReturn1y");
   const r3El = document.getElementById("avgReturn3y");
   const r5El = document.getElementById("avgReturn5y");
@@ -1658,7 +1667,7 @@ function renderPage2() {
               <span class="pf-item-name">${fundStack(f)}</span>
             </div>
             <span class="pf-item-ratio">${f.ratio}%</span>
-            <span class="pf-item-ret ${f.returns.y1 >= 0 ? 'pos' : 'neg'}">${f.returns.y1 >= 0 ? '+' : ''}${f.returns.y1.toFixed(2)}%</span>
+            <span class="pf-item-ret ${f.returns.y1 >= 0 ? 'pos' : 'neg'}"><small style="font-size:.6em;color:#8A918C;font-weight:600">지난 1년 </small>${f.returns.y1 >= 0 ? '+' : ''}${f.returns.y1.toFixed(2)}%<br><small style="font-size:.6em;color:#0F4C45;font-weight:700">기대 연 ${hanhoFundRate(f).rate.toFixed(1)}%</small></span>
           </div>
           <div class="pf-holding-tags">${tagsHtml}</div>
         </div>
@@ -1674,7 +1683,7 @@ function renderPage2() {
             <span class="pf-item-name">${fundStack(f)}</span>
           </div>
           <span class="pf-item-ratio">${f.ratio}%</span>
-          <span class="pf-item-ret ${f.returns.y1 >= 0 ? 'pos' : 'neg'}">${f.returns.y1 >= 0 ? '+' : ''}${f.returns.y1.toFixed(2)}%</span>
+          <span class="pf-item-ret ${f.returns.y1 >= 0 ? 'pos' : 'neg'}"><small style="font-size:.6em;color:#8A918C;font-weight:600">지난 1년 </small>${f.returns.y1 >= 0 ? '+' : ''}${f.returns.y1.toFixed(2)}%<br><small style="font-size:.6em;color:#0F4C45;font-weight:700">기대 연 ${hanhoFundRate(f).rate.toFixed(1)}%</small></span>
         </div>
         <div class="pf-holding-tags">${tags.join('')}</div>
       </div>
