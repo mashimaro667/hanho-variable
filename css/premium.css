@@ -1,0 +1,429 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+/* =====================================================
+   PREMIUM 레이어 — (주)컨설팅을 더하다 ETF저축(변액) 제안서
+   색 축: 딥 네이비 + 샴페인 골드 + 옅은 파랑·회색 (붉은 계열 없음)
+   원본 style.v18.css 위에 덮어쓴다. 계산·기능 코드는 건드리지 않는다.
+   ===================================================== */
+
+:root {
+  --primary: #14315c;          /* 딥 네이비 */
+  --primary-light: #5b86b8;    /* 차분한 스틸블루 */
+  --accent: #b8871d;           /* 앤티크 골드 — 강조 숫자 */
+  --gold: #d9a636;             /* 샴페인 골드 */
+  --gold-soft: #f6e9c8;
+  --green: #2f6f5e;
+  --red: #d64545;              /* 상승·강조 숫자용 (2026-09-20 상무님: 빨강 써도 돼). 템플릿 톤은 네이비·골드 */
+  --bg: #eef2f7;               /* 옅은 블루그레이 */
+  --card: #ffffff;
+  --border: #dde5ef;
+  --text: #16263d;
+  --muted: #6a7789;
+  --shadow: 0 1px 2px rgba(20,49,92,.05), 0 8px 28px rgba(20,49,92,.07);
+  --shadow-lg: 0 2px 4px rgba(20,49,92,.06), 0 18px 48px rgba(20,49,92,.12);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  background:
+    radial-gradient(1100px 520px at 12% -6%, #dfe8f4 0%, transparent 60%),
+    radial-gradient(900px 480px at 100% 0%, #f3ecd9 0%, transparent 55%),
+    var(--bg) !important;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+/* ── 헤더 : 네이비 + 금색 헤어라인 ── */
+.page-header {
+  background: linear-gradient(115deg, #0d2245 0%, #14315c 55%, #1d4275 100%) !important;
+  border-bottom: 1px solid rgba(217,166,54,.55);
+  box-shadow: 0 10px 34px rgba(13,34,69,.28) !important;
+}
+.page-header::before { background: linear-gradient(90deg, transparent, #d9a636, transparent) !important; }
+.page-header h1, .page-header .logo-title { letter-spacing: -0.02em; }
+.logo-author { color: var(--gold) !important; }
+.logo-champion {
+  background: linear-gradient(135deg, #e8c266, #c9962c) !important;
+  color: #2a1e05 !important;
+  border: 0 !important;
+  box-shadow: 0 2px 10px rgba(217,166,54,.35);
+}
+.login-user-badge, .logout-btn, .member-mgmt-btn {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  color: #eaf0f8 !important;
+  backdrop-filter: blur(6px);
+}
+.pwa-install-btn {
+  background: linear-gradient(135deg, #e8c266, #c9962c) !important;
+  color: #2a1e05 !important;
+  border: 0 !important;
+}
+
+/* ── 카드 : 얇은 선 + 넓은 여백 + 부드러운 그림자 ── */
+.step-card, .result-section, .sim-card, .summary-card {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+.step-card { padding-block: 26px !important; }
+.step-header { border-bottom: 1px solid #edf1f6 !important; padding-bottom: 14px !important; }
+.step-num {
+  background: linear-gradient(135deg, #14315c, #22467c) !important;
+  color: #f0d488 !important;
+  border-radius: 999px !important;
+  letter-spacing: .08em;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(20,49,92,.25);
+}
+.step-title { color: var(--primary) !important; font-weight: 700; letter-spacing: -0.02em; }
+.section-title { color: var(--primary) !important; }
+.section-title i, .step-card label i { color: var(--gold) !important; }
+
+/* ── 입력창 ── */
+input[type="text"]:not(.pw-input):not(.signup-input), input[type="tel"], input[type="number"], select {
+  background: #f7f9fc !important;
+  border: 1px solid #d5deea !important;
+  border-radius: 12px !important;
+  color: var(--text) !important;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+input[type="text"]:not(.pw-input):not(.signup-input):focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus {
+  background: #fff !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 4px rgba(217,166,54,.18) !important;
+  outline: none;
+}
+#monthlyAmount { color: var(--primary) !important; font-weight: 800; letter-spacing: -0.02em; }
+
+/* ── 칩(금액·프리셋) ── */
+.amt-btn, .preset-btn {
+  background: #fff !important;
+  border: 1px solid #cfdae8 !important;
+  color: var(--primary) !important;
+  border-radius: 999px !important;
+  font-weight: 600;
+  transition: all .18s ease;
+}
+.amt-btn:hover, .preset-btn:hover {
+  border-color: var(--gold) !important;
+  background: var(--gold-soft) !important;
+  transform: translateY(-1px);
+}
+.amt-btn.active, .preset-btn.active {
+  background: linear-gradient(135deg, #14315c, #22467c) !important;
+  border-color: #14315c !important;
+  color: #f0d488 !important;
+}
+.amt-reset-btn, .preset-btn.reset {
+  border-color: #cfdae8 !important;
+  color: var(--muted) !important;
+}
+
+/* ── 사업비 탭 ── */
+.etab { border-radius: 14px !important; border: 1px solid #d7e0ec !important; background: #f8fafd !important; color: var(--primary) !important; }
+.etab-cross { background: linear-gradient(135deg, #fbf5e4, #f3f6fb) !important; border-color: #e6d49c !important; }
+
+/* ── 핵심 버튼 : 골드 ── */
+.generate-btn {
+  background: linear-gradient(135deg, #e6bd5b 0%, #d9a636 45%, #b8871d 100%) !important;
+  color: #201603 !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  box-shadow: 0 10px 28px rgba(184,135,29,.38), inset 0 1px 0 rgba(255,255,255,.45) !important;
+  transition: transform .2s, box-shadow .2s;
+}
+.generate-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(184,135,29,.46), inset 0 1px 0 rgba(255,255,255,.5) !important; }
+
+/* ── 수익률 카드 ── */
+.ret-value, .yield-value, .avg-return-value { color: var(--accent) !important; font-weight: 800; }
+
+/* ── 로그인 화면 ── */
+.pw-lock-overlay, #pwLockOverlay {
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(217,166,54,.18), transparent 60%),
+    linear-gradient(160deg, #0a1b38 0%, #14315c 55%, #1d4275 100%) !important;
+}
+.pw-lock-box {
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(240,212,136,.28) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 30px 80px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(14px);
+}
+.pw-login-submit-btn {
+  background: linear-gradient(135deg, #e6bd5b, #c9962c) !important;
+  color: #201603 !important;
+  border: 0 !important;
+  font-weight: 800;
+  box-shadow: 0 10px 26px rgba(201,150,44,.4);
+}
+.pw-signup-link { border: 1px dashed rgba(240,212,136,.5) !important; color: #e9edf4 !important; }
+.pw-signup-link b, .pw-signup-link strong { color: #f0d488 !important; }
+
+/* ── 인쇄 : 카드 그림자·배경 제거 (원본 인쇄 규칙 유지) ── */
+@media print {
+  body { background: #fff !important; }
+  .step-card, .result-section { box-shadow: none !important; }
+}
+
+/* ── 가짜 접속자 수 표시 제거 (원본은 217~225 사이 난수를 '현재 접속자'로 표시했음) ── */
+.pw-visitor-bar { display: none !important; }
+
+/* 로그인 입력창 : 유리 질감 유지 */
+.pw-input {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(240,212,136,.32) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+}
+.pw-input:focus { border-color: #e6bd5b !important; box-shadow: 0 0 0 4px rgba(230,189,91,.2) !important; }
+.pw-lock-icon { background: rgba(240,212,136,.12) !important; border-color: rgba(240,212,136,.4) !important; }
+.pw-lock-icon i, .pw-lock-contact { color: #f0d488 !important; }
+
+/* ================= 결과 화면 ================= */
+.page2-header .proposal-title-area h1, .proposal-title { letter-spacing: -0.02em; }
+.proposal-ai-tag { background: rgba(240,212,136,.14) !important; border: 1px solid rgba(240,212,136,.45) !important; color: #f0d488 !important; }
+.back-btn, .print-btn {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.25) !important;
+  color: #f2f5fa !important;
+}
+.print-btn { background: linear-gradient(135deg,#e6bd5b,#c9962c) !important; color:#201603 !important; border:0 !important; font-weight:800; }
+
+.section-title.profile-section-title { color: var(--primary) !important; }
+.section-title.profile-section-title i { background: none !important; color: var(--gold) !important; }
+
+/* 고객 카드 · 월 납입액 카드 */
+.pf-card { background: #f8fafd !important; border: 1px solid var(--border) !important; border-radius: 16px !important; }
+.pf-amount-row {
+  background: linear-gradient(135deg, #0d2245 0%, #14315c 60%, #22467c 100%) !important;
+  border: 1px solid rgba(240,212,136,.35) !important;
+  box-shadow: 0 12px 30px rgba(13,34,69,.25) !important;
+}
+.pf-amount-row .pf-icon-lg { color: #f0d488 !important; }
+.pf-amount-big { color: #fff !important; }
+.pf-propose-date { background: rgba(255,255,255,.1) !important; color: #e9eef6 !important; }
+
+/* 과거 성과 : 붉은 계열 대신 골드(+) · 청회색(−) */
+.pf-rg-value.pos { color: #d64545 !important; }
+.pf-rg-value.neg { color: #3d6199 !important; }
+.pf-rg-cell--accent { background: linear-gradient(180deg, #fbf5e4, #f8efd3) !important; }
+.pf-sim-basis-card { background: #f4f7fb !important; border: 1px solid var(--border) !important; color: #3a4a63 !important; }
+
+/* 평균 수익률 상단 박스 */
+.sim-avg-rate-box { background: linear-gradient(135deg, #f4f7fb, #fbf5e4) !important; border: 1px solid #e3dcc4 !important; border-radius: 16px !important; }
+.sim-avg-rate-value { color: #a87a17 !important; font-weight: 800; }
+
+/* 하단 시뮬 카드 */
+.sim-card { border-radius: 16px !important; box-shadow: var(--shadow) !important; }
+.sim-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg) !important; }
+.sim-card-amount { letter-spacing: -0.02em; font-weight: 800; }
+
+/* 표 */
+.sim-table thead th { background: #14315c !important; color: #f0d488 !important; }
+.sim-table .highlight-row td { background: #fbf5e4 !important; }
+.sim-table td.pos { color: #d64545 !important; }
+
+/* 합계 100% 배지 : 초록 → 네이비 */
+.ratio-total.ok, .ratio-total { background: linear-gradient(135deg,#14315c,#22467c) !important; color: #f0d488 !important; }
+
+/* 유가증권 안내 박스 */
+.securities-box { background: linear-gradient(135deg, #0d2245 0%, #14315c 60%, #1d4275 100%) !important; border: 1px solid rgba(240,212,136,.35) !important; }
+.securities-content h3 { color: #f0d488 !important; }
+.securities-content em { color: #f0d488 !important; }
+
+/* 펀드 카드 */
+.fnc-card { border-radius: 16px !important; border: 1px solid var(--border) !important; box-shadow: var(--shadow) !important; }
+
+/* 고객 투자 프로파일 제목 : 그라데이션 글자·보라 밑줄 → 네이비 글자 + 금색 밑줄 */
+.section-title.profile-section-title {
+  background: none !important;
+  -webkit-background-clip: initial !important; background-clip: initial !important;
+  -webkit-text-fill-color: var(--primary) !important;
+  border-image: linear-gradient(90deg, #d9a636, #eadfb8 70%, transparent) 1 !important;
+}
+.section-title.profile-section-title::after { background: linear-gradient(90deg, #d9a636, #b8871d) !important; }
+
+
+/* =====================================================================
+   PREMIUM v2 — 금융 전문 사이트 톤 (2026-09-21 상무님: 구조는 그대로, 디자인만 전문가스럽게)
+   원칙: 작은 라운드 · 가는 선 · 네이비 그림자 · 숫자는 같은 폭 · 금색은 한 곳에만
+   ===================================================================== */
+:root {
+  --radius: 12px;
+  --radius-sm: 8px;
+  --navy-900: #0b1f3f;
+  --navy-800: #102a52;
+  --navy-700: #14315c;
+  --steel: #5b7aa3;
+  --gold-600: #b98d2e;
+  --gold-400: #d9b25a;
+  --line: #e1e7f0;
+  --shadow: 0 1px 0 rgba(11,31,63,.04), 0 6px 20px -8px rgba(11,31,63,.14);
+  --shadow-lg: 0 2px 0 rgba(11,31,63,.04), 0 18px 40px -14px rgba(11,31,63,.22);
+}
+body, button, input, select, textarea {
+  font-family: 'Pretendard Variable', 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+}
+body { font-feature-settings: 'tnum' 1, 'ss05' 1; font-variant-numeric: tabular-nums; }
+.fa-solid, .fa-regular, .fa-brands, .fas, .far, .fab { font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands' !important; }
+.fa-brands, .fab { font-family: 'Font Awesome 6 Brands' !important; }
+
+/* 본문 바탕 : 옅은 청회색 + 아주 미세한 격자 */
+body {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55), transparent 320px),
+    radial-gradient(1000px 420px at 8% -8%, #e4ecf6 0%, transparent 62%),
+    radial-gradient(800px 380px at 100% 0%, #f5eedb 0%, transparent 58%),
+    #eef2f7 !important;
+}
+
+/* 헤더 : 더 낮고 단정하게, 금색은 헤어라인 하나만 */
+.page-header {
+  background: linear-gradient(100deg, #081833 0%, #0f2850 52%, #17386b 100%) !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 1px 0 rgba(217,178,90,.65), 0 14px 30px -12px rgba(8,24,51,.55) !important;
+}
+.page-header h1, .logo-title { font-weight: 800; letter-spacing: -0.03em; }
+.logo-champion, .logo-mdrt { border-radius: 4px !important; font-weight: 700; letter-spacing: 0; }
+.logo-mdrt, [class*="mdrt"] { background: rgba(255,255,255,.1) !important; border: 1px solid rgba(255,255,255,.28) !important; color: #dbe6f5 !important; box-shadow: none !important; }
+.login-user-badge, .logout-btn, .member-mgmt-btn, .pwa-install-btn, .back-btn, .print-btn { border-radius: 8px !important; }
+
+/* 카드 : 얇은 선 + 위쪽 헤어라인, 라운드는 작게 */
+.step-card, .result-section, .sim-card, .summary-card, .fnc-card, .pf-card {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow) !important;
+}
+.step-card { position: relative; }
+.step-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--gold-400), var(--gold-600));
+  border-radius: 12px 0 0 12px; opacity: .9;
+}
+.step-num {
+  border-radius: 4px !important; font-size: 10px !important; letter-spacing: .14em !important;
+  background: var(--navy-800) !important; color: #e6c877 !important; box-shadow: none !important;
+  padding: 4px 9px !important;
+}
+.step-title, .section-title { letter-spacing: -0.025em; }
+
+/* 입력창·칩·버튼 : 금융 UI 톤 (라운드 8) */
+input[type="text"]:not(.pw-input):not(.signup-input), input[type="tel"], input[type="number"], select { border-radius: 8px !important; }
+.amt-btn, .preset-btn { border-radius: 8px !important; font-weight: 600; font-variant-numeric: tabular-nums; }
+.amt-btn.active, .preset-btn.active { background: var(--navy-800) !important; border-color: var(--navy-800) !important; color: #f0d488 !important; }
+.generate-btn { border-radius: 10px !important; }
+:focus-visible { outline: 2px solid var(--gold-400) !important; outline-offset: 2px; }
+
+/* 종류 태그 : 알약·파스텔 대신 각진 라벨 */
+.type-badge { border-radius: 4px !important; font-weight: 700; letter-spacing: 0; border: 1px solid transparent; }
+.type-badge.type-1 { background: #e9f3f0 !important; color: #256a5f !important; border-color: #cfe4de; }
+.type-badge.type-2 { background: #e8eff8 !important; color: #1f4a80 !important; border-color: #cfdcee; }
+.type-badge.type-3 { background: #f8f0dc !important; color: #8a6210 !important; border-color: #ecdcaa; }
+.type-badge.type-4 { background: #eceef7 !important; color: #3f4d86 !important; border-color: #d3d8ec; }
+.type-badge.type-5 { background: #f1ede6 !important; color: #6b5a3a !important; border-color: #e0d8c6; }
+
+/* 펀드 목록 카드 */
+.fund-card, .fund-item, .fund-row { border-radius: 12px !important; }
+input[type="range"] { accent-color: var(--navy-700); }
+
+/* 숫자 강조 : 같은 폭·묵직하게 */
+.pf-amount-big, .sim-card-amount, .pf-rg-value, .ret-value, .sim-avg-rate-value, .ratio-value { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+/* ── AI 포트폴리오 추천 : 보라·형광 → 네이비 + 골드 ── */
+.ai-recommend-box { background: var(--navy-900) !important; border-radius: 12px !important; box-shadow: 0 18px 40px -16px rgba(11,31,63,.6) !important; border: 1px solid rgba(217,178,90,.28); }
+.ai-rec-header { background: linear-gradient(110deg, #081833 0%, #0f2850 60%, #17386b 100%) !important; border-bottom: 1px solid rgba(217,178,90,.35); }
+.ai-rec-header::before { background: radial-gradient(ellipse at 78% 50%, rgba(217,178,90,.16) 0%, transparent 62%) !important; }
+.ai-badge { background: linear-gradient(135deg, #e0bd68, #b98d2e) !important; color: #1d1403 !important; border-radius: 4px !important; box-shadow: none !important; letter-spacing: .04em !important; }
+.ai-pulse-dot { background: #e0bd68 !important; }
+.ai-rec-types { background: #0b1f3f !important; }
+.ai-btn { border-radius: 10px !important; }
+.ai-btn-rec-badge { background: linear-gradient(135deg,#e0bd68,#b98d2e) !important; color: #1d1403 !important; border-radius: 4px !important; box-shadow: none !important; animation: none !important; }
+.ai-result-box { background: #0a1a36 !important; }
+.ai-result-title { color: #eef3fb !important; }
+.ai-dc-title { color: #e0bd68 !important; }
+.ai-fund-bar { opacity: 1 !important; }
+
+/* 교차(사업비) 배너·요약 : 보라/주황 그라데이션 → 네이비 + 골드 */
+.cross-header-banner, .expense-status-badge { background: linear-gradient(120deg, #0f2850, #17386b) !important; }
+.cross-winner-box { border: 1px solid #ecdcaa; }
+
+/* 표 : 헤어라인 + 줄무늬 */
+.sim-table { border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; }
+.sim-table thead th { background: var(--navy-800) !important; color: #ecd28a !important; font-weight: 700; letter-spacing: .02em; }
+.sim-table tbody tr:nth-child(even) td { background: #f6f8fc; }
+.sim-table td { border-bottom: 1px solid #edf1f7 !important; font-variant-numeric: tabular-nums; }
+
+/* 스크롤바 */
+* { scrollbar-width: thin; scrollbar-color: #b8c4d6 transparent; }
+::selection { background: #f0dd9d; color: #14315c; }
+
+
+/* ── v2b : 배지·태그·안내상자 (알약·파스텔 → 각진 라벨) ── */
+html body .ratio-total.ok, html body .ratio-total {
+  background: linear-gradient(135deg, #0f2850, #17386b) !important; color: #ecd28a !important;
+  border: 1px solid rgba(217,178,90,.55) !important; border-radius: 8px !important;
+  box-shadow: 0 10px 26px -10px rgba(11,31,63,.6) !important; font-weight: 700; letter-spacing: 0;
+}
+.ratio-total.ok i, .ratio-total i { color: #e0bd68 !important; }
+
+.fnc-type-badge, .fnc-ratio-badge, .ks-tag, .year-badge, .san-badge, .ai-expense-badge, .expense-badge-th, .pf-holding-tag {
+  border-radius: 4px !important; font-weight: 700; letter-spacing: 0;
+}
+.fnc-type-badge { background: #fff !important; border: 1px solid #cdd8e8 !important; color: #23406d !important; }
+.fnc-ratio-badge { background: #0f2850 !important; color: #ecd28a !important; border: 1px solid rgba(217,178,90,.5) !important; }
+.ks-tag, .sc-tags span { background: #f3f6fb !important; border: 1px solid #d9e2ef !important; color: #2b4266 !important; }
+.pf-holding-tag { background: #fff !important; }
+
+.san-badge.blue   { background: #e8eff8 !important; color: #1f4a80 !important; border: 1px solid #cfdcee; }
+.san-badge.orange { background: #f8f0dc !important; color: #8a6210 !important; border: 1px solid #ecdcaa; }
+.san-badge.green  { background: #e9f3f0 !important; color: #256a5f !important; border: 1px solid #cfe4de; }
+.year-badge.blue  { background: #e8eff8 !important; color: #1f4a80 !important; }
+
+/* 적립식 안내 상자 : 노랑 → 샴페인 */
+.savings-analysis-box, .san-box, [class*="savings-analy"] {
+  background: linear-gradient(180deg, #fbf7ea, #f7f0da) !important;
+  border: 1px solid #e6d6a2 !important; border-left: 3px solid var(--gold-600) !important;
+  border-radius: 10px !important;
+}
+.san-row { align-items: center; }
+
+/* 면책·주의 문구 */
+[class*="disclaimer"], .sim-note, .result-note { border-left: 3px solid var(--navy-700) !important; background: #f2f5fb !important; border-radius: 6px !important; }
+
+/* 펀드 상세 카드 머리 : 연한 톤 유지, 이름 진하게 */
+.fnc-header { border-bottom: 1px solid var(--line); }
+.fnc-card { overflow: hidden; }
+
+/* 차트 영역 */
+canvas { font-family: 'Pretendard Variable', sans-serif; }
+.chart-wrap, .sim-chart-wrap { border-radius: 10px; }
+
+.sim-accumulate-notice {
+  background: linear-gradient(180deg, #fbf7ea, #f7f0da) !important;
+  border: 1px solid #e6d6a2 !important; border-left: 3px solid var(--gold-600) !important; border-radius: 10px !important;
+}
+.san-row strong, .san-title { color: #6f4f0c !important; }
+
+/* 떠 있는 합계 배지(고정 위치) · 종목 태그 */
+body > .ok, .ok[style*="fixed"], div.ok {
+  background: linear-gradient(135deg, #0f2850, #17386b) !important; color: #ecd28a !important;
+  border: 1px solid rgba(217,178,90,.55) !important; border-radius: 8px !important;
+  box-shadow: 0 10px 26px -10px rgba(11,31,63,.6) !important;
+}
+div.ok i { color: #e0bd68 !important; }
+.fnc-pill { border-radius: 4px !important; border: 1px solid #cdd8e8 !important; background: #f6f8fc !important; color: #23406d !important; font-weight: 600; }
+
+/* ── 3D 느낌의 막대(HTML 막대) : 위쪽 하이라이트 + 아래쪽 음영 + 살짝 뜬 그림자 ── */
+.fnc-bar-fill, .ai-fund-bar, .sc-track-fill, [class$="-slider-fill"], [class*="ratio-fill"] {
+  background-image: linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.08) 45%, rgba(0,0,0,.18) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 3px rgba(0,0,0,.18), 0 2px 5px -1px rgba(11,31,63,.35);
+}
+.fnc-bar-track { height: 9px !important; box-shadow: inset 0 1px 3px rgba(11,31,63,.22); background: #e3e9f2 !important; overflow: visible !important; border-radius: 5px !important; }
+.fnc-bar-fill { border-radius: 5px !important; }
