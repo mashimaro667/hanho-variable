@@ -6,414 +6,262 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0F4C45">
 <title>한호 변액설계 | 한호자산연구소</title>
-<!-- 한호 변액설계 2.0.0: 변액을더하다(김재협 상무님) 화면 구조·계산 코드를 허락받아 쓰고 디자인을 새로 입힘 (2026-11-14 주성씨 지시) -->
+<!-- 한호 변액설계 3.0.0 (2026-11-14, 개발팀 지안)
+     비용은 신한라이프 제안용 상품설명서(2026-11-14 발행, 남 38세 설계)에서 옮김.
+     계산 결과를 설명서 '계약자적립액 예시'(투자수익률 -1%·-2.5%·2.5%·3.75%)와 대조해 30년까지 오차 0.3% 이내 확인 (_도구\엔진점검.js) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="css/style.v18.css?v=2.0.0">
-<link rel="stylesheet" href="css/premium.css?v=2.0.0">
-<link rel="stylesheet" href="css/cp-theme.css?v=2.0.0">
-<link rel="stylesheet" href="css/cp-proposal.css?v=2.0.0">
-<link rel="stylesheet" href="css/cp-pro.css?v=2.0.0">
-<link rel="stylesheet" href="css/cp-light.css?v=2.0.0">
-<link rel="stylesheet" href="css/cp-print.css?v=2.0.0">
-<link rel="stylesheet" href="css/hanho-theme.css?v=2.0.0">
+<style>
+:root{--paper:#F5F2EA;--paper2:#EDE8DC;--card:#fff;--line:#E2DCCD;--line2:#CFC6B2;--ink:#1E2A28;--ink2:#4B5752;--ink3:#8A918C;--em:#0F4C45;--em2:#1B6B61;--em3:#E3EFEC;--cu:#B8743A;--cu2:#F3E5D6;--up:#C0392B;--down:#2F6FDB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,'Malgun Gothic',sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;word-break:keep-all}
+.bar{background:var(--em);color:#fff;border-bottom:3px solid var(--cu);position:sticky;top:0;z-index:20}
+.in{max-width:1240px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+.mark{width:42px;height:42px;border-radius:50%;background:var(--cu);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.nm{font-size:19px;font-weight:800;line-height:1.2}.nm small{display:block;font-size:10px;letter-spacing:2.5px;color:#A9C9C2;font-weight:600}
+.bar .r{margin-left:auto;font-size:13px;color:#CFE3DE}
+main{max-width:1240px;margin:0 auto;padding:22px 20px 40px;display:grid;grid-template-columns:420px 1fr;gap:22px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(30,42,40,.04),0 6px 20px rgba(30,42,40,.05)}
+.card h3{font-size:16px;color:var(--em);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.step{font-size:11px;font-weight:800;background:var(--em);color:#fff;border-radius:999px;padding:2px 9px;letter-spacing:1px}
+label{display:block;font-size:12.5px;color:var(--ink2);margin:10px 0 4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:10px;font:inherit;font-size:15px;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid #CFE3DE;border-color:var(--em2)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prod{border:1px solid var(--line2);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.prod b{display:block;font-size:14px}.prod span{font-size:12px;color:var(--ink3)}
+.prod.on{border:2px solid var(--em);background:var(--em3);padding:9px 11px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line2);background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink2)}
+.chip:hover{border-color:var(--em2);color:var(--em)}.chip.on{background:var(--em);color:#fff;border-color:var(--em)}
+.feebox{background:var(--paper);border:1px dashed var(--line2);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink2);margin-top:10px}
+.feebox b{color:var(--em)}
+.rate{display:flex;align-items:baseline;gap:6px}.rate .v{font-size:34px;font-weight:800;color:var(--cu)}
+input[type=range]{padding:0;border:0;accent-color:var(--em);height:26px}
+.fund{display:grid;grid-template-columns:1fr 54px;gap:2px 8px;padding:8px 0;border-top:1px dashed var(--line)}
+.fund:first-of-type{border-top:0}
+.fund .n{font-size:13.5px;font-weight:700}.fund .m{font-size:11.5px;color:var(--ink3)}
+.fund .w{font-weight:800;color:var(--em);text-align:right;font-size:14px}
+.fund input{grid-column:1/3}
+.pos{color:var(--up)}.neg{color:var(--down)}
+.sum{display:flex;justify-content:space-between;font-weight:700;border-top:1px solid var(--line);padding-top:8px;margin-top:4px;font-size:14px}
+.sum.bad span:last-child{color:var(--up)}
+.ref{background:var(--cu2);border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:10px;color:#6E4520}
+.ref button{margin-top:6px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer}
+.btn.em{background:var(--em);color:#fff}.btn.cu{background:var(--cu);color:#fff}.btn.ln{background:#fff;border:1px solid var(--line2);color:var(--ink2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.kpi .k{font-size:12px;color:var(--ink3)}.kpi .v{font-size:20px;font-weight:800;color:var(--em)}.kpi .v.c{color:var(--cu)}
+.kpi .s{font-size:11.5px;color:var(--ink3)}
+.chart{height:300px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 7px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{background:var(--paper2);color:var(--ink2);font-weight:600}
+th:first-child,td:first-child{text-align:left}
+tr.hl td{background:#FBF6EE;font-weight:700}
+.tw{overflow:auto;max-height:520px}
+.warn{background:#FFF8E6;border:1px solid #F0DDA8;color:#7A5A12;border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.7}
+.hd{display:flex;justify-content:space-between;align-items:center}
+footer{max-width:1240px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:var(--ink3)}
+@media(max-width:960px){main{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+/* 인쇄 */
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .bar,.noprint,aside{display:none!important}
+  main{display:block;padding:0}
+  .card,.kpi{box-shadow:none;break-inside:avoid}
+  .tw{max-height:none;overflow:visible}
+  .ptitle{display:block!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+.ptitle{display:none;border-bottom:3px solid var(--em);padding-bottom:8px;margin-bottom:12px}
+.ptitle b{font-size:22px;color:var(--em)}.ptitle span{float:right;font-size:11px;color:var(--ink3);margin-top:8px}
+</style>
 </head>
-<body class="hanho">
-<div id="page1" class="page active">
-  <header class="hh-bar">
-    <div class="hh-in">
-      <div class="hh-brand"><span class="hh-mark">韓湖</span><span class="hh-name">한호 변액설계<small>HANHO VARIABLE PLANNER</small></span></div>
-      <div class="hh-right"><span class="hh-date" id="hhToday"></span></div>
+<body>
+<header class="bar"><div class="in">
+  <div class="mark">韓湖</div><div class="nm">한호 변액설계<small>HANHO VARIABLE PLANNER</small></div>
+  <div class="r" id="today"></div>
+</div></header>
+
+<main>
+<aside>
+  <div class="card">
+    <h3><span class="step">STEP 1</span>고객</h3>
+    <div class="row2">
+      <div><label>고객명</label><input id="cName" placeholder="홍길동"></div>
+      <div><label>나이</label><input id="cAge" type="number" min="0" max="80" value="38"></div>
     </div>
-  </header>
-  <main class="page1-main">
-    <!-- 좌측: 입력 폼 -->
-    <section class="input-panel">
+  </div>
 
-      <!-- STEP 1: 고객 정보 -->
-      <div class="step-card">
-        <div class="step-header">
-          <span class="step-num">STEP 1</span>
-          <span class="step-title">고객 기본정보 입력</span>
-          <span class="propose-date-inline"><i class="fa-solid fa-calendar-day"></i> 제안일: <span id="proposeDate"></span></span>
-        </div>
-        <!-- 1줄 3개 -->
-        <div class="form-row-3">
-          <div class="form-group">
-            <label><i class="fa-solid fa-user"></i> 고객명</label>
-            <input type="text" id="clientName" placeholder="OOO"
-              onkeydown="nameKeyHandler(event)" autocomplete="off" />
-          </div>
-          <div class="form-group">
-            <label><i class="fa-solid fa-cake-candles"></i> 생년월일</label>
-            <input type="text" id="clientBirth" placeholder="YYYY-MM-DD" inputmode="numeric"
-              maxlength="10" oninput="birthAutoFormat(this)" autocomplete="off" />
-            <div id="birthHint" class="birth-hint"></div>
-          </div>
-          <div class="form-group">
-            <label><i class="fa-solid fa-venus-mars"></i> 성별</label>
-            <div class="radio-group">
-              <label class="radio-label"><input type="radio" name="gender" value="남성" checked /> 남성</label>
-              <label class="radio-label"><input type="radio" name="gender" value="여성" /> 여성</label>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="card">
+    <h3><span class="step">STEP 2</span>상품·금액</h3>
+    <div class="prods" id="prods"></div>
+    <label id="amtLbl">월 납입금액 (원)</label>
+    <input id="amt" inputmode="numeric" value="500,000">
+    <div class="chips" id="amtChips"></div>
+    <div class="feebox" id="feebox"></div>
+  </div>
 
-      <!-- STEP 2: 저축 설정 -->
-      <div class="step-card">
-        <div class="step-header">
-          <span class="step-num">STEP 2</span>
-          <span class="step-title">월 저축금액 설정</span>
-          <!-- 사업비 선택 탭 그룹 -->
-          <div class="expense-tab-group">
+  <div class="card">
+    <h3><span class="step">STEP 3</span>투자수익률 가정</h3>
+    <div class="rate"><span class="v" id="rateV">5.0</span><span>% / 연 (펀드 기준가 기준)</span></div>
+    <input type="range" id="rate" min="-3" max="12" step="0.5" value="5">
+    <div class="chips" id="rateChips"></div>
+    <div class="feebox">설명서 예시는 <b>-1%·2.5%·3.75%</b>입니다. 장기 가정은 <b>연 4~6%</b>를 권합니다. 최저사망보증비용 0.1%를 뺀 순수익률로 계산합니다.</div>
+  </div>
 
-            <!-- ① 크로스체크 탭 — 맨 위 단독 풀너비 -->
-            <label class="etab etab-cross" id="crossCheckLabel" title="레벨UP vs 모키적립식 나란히 비교">
-              <input type="checkbox" id="crossCheck" onchange="onCrossCheckChange()" />
-              <span class="etab-icon"><i class="fa-solid fa-code-compare"></i></span>
-              <span class="etab-text">동시체크</span>
-              <span class="etab-badge etab-badge-cross">레벨UP <em>VS</em> 모키적립식</span>
-            </label>
+  <div class="card">
+    <h3 class="hd"><span><span class="step">참고</span> 펀드 구성</span><button class="btn ln" onclick="resetW()" style="font-size:12px;padding:5px 10px">초기화</button></h3>
+    <div style="font-size:12px;color:var(--ink3);margin-bottom:6px">펀드 수익률 기준일 <span id="asOf"></span> · 1년 / 3년 누적 수익률</div>
+    <div id="funds"></div>
+    <div class="sum" id="sum"><span>합계</span><span>0%</span></div>
+    <div class="ref" id="ref"></div>
+  </div>
+</aside>
 
-            <!-- ② 일반 탭 3개 — 가로 배열 -->
-            <div class="etab-row">
+<section>
+  <div class="ptitle"><b id="pTitle"></b><span id="pDate"></span></div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">총 납입 원금</div><div class="v" id="kPrin">-</div><div class="s" id="kPrinS"></div></div>
+    <div class="kpi"><div class="k">10년 시점 적립액</div><div class="v" id="k10">-</div><div class="s" id="k10s"></div></div>
+    <div class="kpi"><div class="k">20년 시점 적립액</div><div class="v" id="k20">-</div><div class="s" id="k20s"></div></div>
+    <div class="kpi"><div class="k">원금 회복 시점</div><div class="v c" id="kBe">-</div><div class="s">적립액 ≥ 낸 돈</div></div>
+  </div>
 
-              <!-- 레벨UP -->
-              <label class="etab etab-levelup" title="레벨UP 사업비 반영">
-                <input type="checkbox" id="levelupCheck" onchange="onExpenseGroupChange('levelup')" />
-                <span class="etab-icon"><i class="fa-solid fa-rocket"></i></span>
-                <span class="etab-text">레벨UP</span>
-              </label>
+  <div class="card"><h3>연차별 적립액 추이</h3><div class="chart"><canvas id="chart"></canvas></div></div>
 
-              <!-- 모키적립식 -->
-              <label class="etab etab-standard" title="모키적립식 사업비 반영">
-                <input type="checkbox" id="expenseCheck" onchange="onExpenseGroupChange('standard')" />
-                <span class="etab-icon"><i class="fa-solid fa-seedling"></i></span>
-                <span class="etab-text">모키적립식</span>
-              </label>
+  <div class="card">
+    <h3 class="hd"><span>연차별 쌓이는 금액</span><span style="font-size:12px;color:var(--ink3);font-weight:400">단위: 원 · 연수익률 <b id="tRate"></b>%</span></h3>
+    <div class="tw"><table id="tbl"></table></div>
+  </div>
 
-              <!-- 모키일시납 -->
-              <label class="etab etab-moki" title="모키일시납 사업비 반영">
-                <input type="checkbox" id="mokiCheck" onchange="onExpenseGroupChange('moki')" />
-                <span class="etab-icon"><i class="fa-solid fa-piggy-bank"></i></span>
-                <span class="etab-text">모키일시납</span>
-              </label>
+  <div class="card">
+    <h3>수익률별 비교 (같은 상품·금액)</h3>
+    <div class="tw"><table id="cmp"></table></div>
+  </div>
 
-            </div>
+  <div class="warn">
+    · 비용은 신한라이프 <b>제안용 상품설명서(2026-11-14 발행, 남 38세 설계)</b>의 계약체결·관리비용·보증비용으로 계산했고, 설명서의 계약자적립액 예시와 30년까지 <b>오차 0.3% 이내</b>로 맞춰 확인했습니다.<br>
+    · 표의 금액은 <b>계약자적립액</b>입니다. 중도 해지 시 받는 <b>해약환급금은 해약공제 때문에 초기에 더 적습니다</b>(특히 월납 7년 이내).<br>
+    · 위험보험료는 나이·성별에 따라 달라지며 근사값을 썼습니다. 실제 금액은 청약 시 상품설명서·가입설계서를 따릅니다.<br>
+    · 투자수익률은 가정이며 미래 수익을 보장하지 않습니다. 변액보험은 원금 손실이 생길 수 있고 예금자보호 대상이 아닙니다.
+  </div>
+  <div class="noprint" style="text-align:right;margin-top:14px"><button class="btn cu" onclick="doPrint()" style="padding:12px 22px">제안서 인쇄 / PDF 저장</button></div>
+</section>
+</main>
+<footer>한호자산연구소 · 한호 변액설계 3.0.0 · 상담 참고용 계산 화면</footer>
 
-          </div>
-          <div id="expenseBanner" class="exp-banner off"></div>
-        </div>
-        <div class="form-group">
-          <!-- 일반 모드 라벨 -->
-          <label id="amountLabel"><i class="fa-solid fa-won-sign"></i> 월 납입금액</label>
-          <div class="amount-input-wrap">
-            <input type="text" id="monthlyAmount" placeholder="300,000" inputmode="numeric"
-              oninput="amountFormatInput(this)" value="300,000" />
-            <span class="unit" id="amountUnit">원 / 월</span>
-          </div>
+<script src="js/data.v16.js"></script>
+<script src="js/fund-latest.js"></script>
+<script src="js/fund-merge.js"></script>
+<script>
+// ── 상품별 비용 (상품설명서 2026-11-14, 남 38세) ──
+// 월납: 매월 보험료에서 체결(120회 이내)+관리+위험 차감 후 투입, 납입 후 매월 보험료의 after를 적립액에서 차감
+// 일시납: 첫 회 first 차감 후 투입, 2~15회 m2, 16회부터 m3를 매월 적립액에서 차감 (보험료 대비)
+const PRODUCTS={
+  saveM:{name:'모키적립 월납',full:'신한모으고키우는변액적립보험 v2.0',type:'M',fee:0.0513,mng:0.0275,risk:0.0004,after:0.016,payY:10,
+    note:'계약체결 <b>5.13%</b> + 계약관리 <b>2.75%</b> = 납입 중 <b>7.88%</b> · 납입 후 매월 보험료의 <b>1.6%</b> · 10년납'},
+  annM:{name:'모키연금 월납',full:'신한모으고키우는변액연금보험',type:'M',fee:0.0589,mng:0.0300,risk:0.00002,after:0.016,payY:10,
+    note:'계약체결 <b>5.89%</b> + 계약관리 <b>3.00%</b> = 납입 중 <b>8.89%</b> · 납입 후 매월 보험료의 <b>1.6%</b> · 10년납 · 연금 수령 시 연금액의 0.7%'},
+  saveL:{name:'모키적립 일시납',full:'신한모으고키우는변액적립보험 v2.0 (일시납)',type:'L',first:0.01352,m2:0.00122,m3:0.00062,risk:0.00001,
+    note:'최초 <b>1.352%</b> · 2~15회 매월 <b>0.122%</b> · 16회부터 매월 <b>0.062%</b> (연 약 0.74%)'},
+  annL:{name:'모키연금 일시납',full:'신한모으고키우는변액연금보험 (일시납)',type:'L',first:0.01577,m2:0.00127,m3:0.00084,risk:0,
+    note:'최초 <b>1.577%</b> · 2~15회 매월 <b>0.127%</b> · 16회부터 매월 <b>0.084%</b> (연 약 1.0%) · 연금 수령 시 연금액의 0.7%'}
+};
+const GUAR=0.001; // 최저사망보증비용 연 0.1%
+const YEARS=30;
+let prod='saveM', rate=5, chart;
+const $=id=>document.getElementById(id);
+const won=v=>Math.round(v).toLocaleString('ko-KR');
+const man=v=>{v=Math.round(v/10000);return v>=10000?(v/10000).toFixed(2).replace(/\.?0+$/,'')+'억':v.toLocaleString('ko-KR')+'만'};
+const amount=()=>+($('amt').value.replace(/[^0-9]/g,''))||0;
 
-          <!-- 일시납 누적 안내 (모키일시납 체크 시만 표시) -->
-          <div id="mokiLumpNotice" class="moki-lump-notice" style="display:none;">
-            <i class="fa-solid fa-circle-info"></i>
-            버튼을 클릭하면 금액이 <strong>합산</strong>됩니다 &nbsp;|&nbsp;
-            <span id="mokiLumpSum">합계: 0원</span>
-          </div>
+// 연차별 적립액·낸 돈
+function simulate(p,A,r){
+  const m=Math.pow(1+r/100-GUAR,1/12)-1; let a=0; const rows=[];
+  for(let k=1;k<=YEARS*12;k++){
+    if(p.type==='M'){
+      if(k<=p.payY*12) a+=A*(1-(k<=120?p.fee:0)-p.mng-p.risk); else a-=A*p.after;
+    }else{
+      if(k===1) a=A*(1-p.first); else a-=A*((k<=15?p.m2:p.m3)+p.risk);
+    }
+    a=Math.max(0,a)*(1+m);
+    if(k%12===0){const y=k/12;rows.push({y,paid:p.type==='M'?A*12*Math.min(y,p.payY):A,acc:a});}
+  }
+  return rows;
+}
 
-          <!-- 버튼을 누를 때마다 현재 금액에 합산됩니다 -->
-          <div class="amount-shortcuts">
-            <button class="amt-btn" id="amtBtn100k"    onclick="handleAmtBtn(100000)">10만</button>
-            <button class="amt-btn" id="amtBtn300k"    onclick="handleAmtBtn(300000)">30만</button>
-            <button class="amt-btn" id="amtBtn500k"    onclick="handleAmtBtn(500000)">50만</button>
-            <button class="amt-btn" id="amtBtn1000k"   onclick="handleAmtBtn(1000000)">100만</button>
-            <button class="amt-btn" id="amtBtn1500k"   onclick="handleAmtBtn(1500000)">150만</button>
-            <span class="amt-divider"></span>
-            <button class="amt-btn" id="amtBtn2000k"   onclick="handleAmtBtn(2000000)">200만</button>
-            <button class="amt-btn" id="amtBtn3000k"   onclick="handleAmtBtn(3000000)">300만</button>
-            <button class="amt-btn" id="amtBtn5000k"   onclick="handleAmtBtn(5000000)">500만</button>
-            <button class="amt-btn" id="amtBtn10000k"  onclick="handleAmtBtn(10000000)">1,000만</button>
-            <button class="amt-btn" id="amtBtn50000k"  onclick="handleAmtBtn(50000000)">5,000만</button>
-            <button class="amt-btn" id="amtBtn100000k" onclick="handleAmtBtn(100000000)">1억</button>
-            <!-- 초기화 버튼 (상시 노출) -->
-            <button class="amt-btn amt-reset-btn" id="amtResetBtn" onclick="resetAmount()">
-              <i class="fa-solid fa-rotate-left"></i> 초기화
-            </button>
-          </div>
-        </div>
-        <!-- 레벨UP 전용: 유족보상위로금 안내 (levelupCheck 체크 시만 표시) -->
-        <div class="levelup-death-benefit-wrap" id="levelupDeathBenefitWrap" style="display:none;">
-          <div class="levelup-death-benefit-box">
-            <div class="ldb-icon"><i class="fa-solid fa-shield-heart"></i></div>
-            <div class="ldb-content">
-              <div class="ldb-label">7년간 유족보상위로금으로 보장받다가</div>
-              <div class="ldb-value">7년 후부터는 100% 저축성으로 전환되어집니다</div>
-              <div class="ldb-sub">담당 재무설계사가 별도 안내</div>
-            </div>
-          </div>
-        </div>
-      </div>
+function renderProds(){
+  $('prods').innerHTML=Object.entries(PRODUCTS).map(([k,p])=>`<div class="prod${k===prod?' on':''}" onclick="setProd('${k}')"><b>${p.name}</b><span>${p.type==='M'?'매월 납입 · 10년납':'한 번에 납입'}</span></div>`).join('');
+  const p=PRODUCTS[prod];
+  $('feebox').innerHTML=`<b>${p.full}</b><br>${p.note}`;
+  $('amtLbl').textContent=p.type==='M'?'월 납입금액 (원)':'일시납 금액 (원)';
+  const list=p.type==='M'?[250000,300000,500000,1000000,2000000]:[10000000,30000000,50000000,100000000];
+  $('amtChips').innerHTML=list.map(v=>`<button class="chip${v===amount()?' on':''}" onclick="setAmt(${v})">${man(v)}</button>`).join('');
+}
+function setProd(k){const was=PRODUCTS[prod].type;prod=k;if(PRODUCTS[k].type!==was)$('amt').value=(PRODUCTS[k].type==='M'?500000:10000000).toLocaleString('ko-KR');renderProds();calc()}
+function setAmt(v){$('amt').value=v.toLocaleString('ko-KR');renderProds();calc()}
+function setRate(v){rate=v;$('rate').value=v;$('rateV').textContent=(+v).toFixed(1);renderRateChips();calc()}
+function renderRateChips(){$('rateChips').innerHTML=[2.5,3.75,5,7,10].map(v=>`<button class="chip${v==rate?' on':''}" onclick="setRate(${v})">${v}%</button>`).join('')}
 
-      <!-- STEP 3: 펀드 비율 설정 -->
-      <div class="step-card">
-        <div class="step-header">
-          <span class="step-num">STEP 3</span>
-          <span class="step-title">펀드 포트폴리오 비율 설정</span>
-          <span id="totalRatioDisplay" class="ratio-total ok">합계: 100%</span>
-        </div>
-        <div class="ratio-helper">
-          <button class="preset-btn" onclick="applyPreset('안정형')"><i class="fa-solid fa-shield"></i> 안정형</button>
-          <button class="preset-btn" onclick="applyPreset('균형형')"><i class="fa-solid fa-scale-balanced"></i> 균형형</button>
-          <button class="preset-btn" onclick="applyPreset('성장형')"><i class="fa-solid fa-rocket"></i> 성장형</button>
-          <button class="preset-btn" onclick="applyPreset('공격형')"><i class="fa-solid fa-fire"></i> 공격형</button>
-          <button class="preset-btn reset" onclick="resetRatios()"><i class="fa-solid fa-rotate-left"></i> 초기화</button>
-        </div>
+// 펀드 (참고용)
+const FUNDS=(typeof FUND_DATA!=='undefined'?FUND_DATA:[]);
+let W=FUNDS.map(()=>0);
+function resetW(){W=FUNDS.map(()=>0);const i=FUNDS.findIndex(f=>/미국주식형/.test(f.name));if(i>=0)W[i]=100;else if(W.length)W[0]=100;renderFunds()}
+function cagr3(f){return (Math.pow(1+(f.returns.y3||0)/100,1/3)-1)*100}
+function renderFunds(){
+  $('asOf').textContent=(window.FUND_LATEST&&FUND_LATEST.asOf)||'-';
+  $('funds').innerHTML=FUNDS.map((f,i)=>{const r=f.returns||{};const c=v=>v>=0?'pos':'neg';
+    return `<div class="fund"><div><div class="n">${f.name}</div><div class="m">${f.type||''} · 1년 <span class="${c(r.y1)}">${(r.y1>=0?'+':'')+r.y1}%</span> · 3년 <span class="${c(r.y3)}">${(r.y3>=0?'+':'')+r.y3}%</span> (연 ${cagr3(f).toFixed(1)}%)</div></div><div class="w" id="fw${i}">${W[i]}%</div>
+    <input type="range" min="0" max="100" step="5" value="${W[i]}" oninput="W[${i}]=+this.value;$('fw${i}').textContent=this.value+'%';fundSum()"></div>`}).join('');
+  fundSum();
+}
+function fundSum(){
+  const t=W.reduce((a,b)=>a+b,0);
+  $('sum').innerHTML=`<span>합계</span><span>${t}%${t!==100?' (100%로 맞춰 주세요)':''}</span>`;$('sum').classList.toggle('bad',t!==100);
+  if(!t){$('ref').innerHTML='펀드를 고르면 최근 3년 실적을 연으로 환산해 보여 드립니다.';return}
+  const c=FUNDS.reduce((s,f,i)=>s+cagr3(f)*W[i]/t,0);
+  const use=Math.min(c,7);
+  $('ref').innerHTML=`최근 3년 실적 연환산: <b>${c.toFixed(1)}%</b><br>${c>7?'최근 3년은 상승장이라 높게 나옵니다. 그대로 10~30년에 이어 붙이면 과장됩니다.<br>':''}<button class="btn ln" onclick="setRate(${(Math.round(use*2)/2).toFixed(1)})">${c>7?'상한 7%로 ':''}이 값을 가정으로 쓰기</button>`;
+}
 
-        <!-- AI 추천 포트폴리오 -->
-        <div class="ai-recommend-box">
-          <div class="ai-rec-header">
-            <div class="ai-rec-header-left">
-              <span class="ai-badge"><i class="fa-solid fa-microchip"></i> AI Optimizer</span>
-              <div class="ai-rec-titles">
-                <span class="ai-rec-title">AI 최적 포트폴리오 추천</span>
-                <span class="ai-rec-desc">과거 수익률 기반 알고리즘으로 최적 비율을 자동 산출합니다</span>
-              </div>
-            </div>
-            <div class="ai-pulse-dot"></div>
-          </div>
-          <!-- 클릭 유도 안내 -->
-          <div class="ai-rec-hint">
-            <i class="fa-solid fa-hand-pointer"></i>
-            아래 버튼을 클릭하면 펀드 비율이 자동으로 설정됩니다
-          </div>
-          <div class="ai-rec-types">
-            <button class="ai-btn ai-btn-profit" onclick="applyAIRecommend('sharpe')">
-              <div class="ai-btn-icon-wrap">
-                <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 27V17M12 27V20M19 27V14" stroke-width="3" opacity=".45"/><path d="M4 20L12 12L17 16L27 6"/><path d="M20 6H27V13"/></svg>
-              </div>
-              <div class="ai-btn-text">
-                <span class="ai-btn-name">수익 최적형</span>
-                <span class="ai-btn-desc">샤프비율 극대화</span>
-              </div>
-            </button>
-            <button class="ai-btn ai-btn-safe" onclick="applyAIRecommend('lowrisk')">
-              <div class="ai-btn-icon-wrap">
-                <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3L27 7V15C27 22 22 27 16 29C10 27 5 22 5 15V7Z" fill="currentColor" fill-opacity=".16"/><path d="M11 16L15 20L22 12"/></svg>
-              </div>
-              <div class="ai-btn-text">
-                <span class="ai-btn-name">안전 우선형</span>
-                <span class="ai-btn-desc">변동성 최소화</span>
-              </div>
-            </button>
-            <button class="ai-btn ai-btn-balanced" onclick="applyAIRecommend('balanced')">
-              <div class="ai-btn-glow"></div>
-              <div class="ai-btn-icon-wrap">
-                <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5V26M10 27H22M6 10H26"/><circle cx="16" cy="5" r="1.6" fill="currentColor"/><path d="M6 10L3 18Q6 21.5 9 18Z" fill="currentColor" fill-opacity=".22"/><path d="M26 10L23 18Q26 21.5 29 18Z" fill="currentColor" fill-opacity=".22"/><path d="M27 2.5V6.5M25 4.5H29" stroke-width="1.6"/></svg>
-              </div>
-              <div class="ai-btn-text">
-                <span class="ai-btn-name">AI 균형 최적형</span>
-                <span class="ai-btn-desc">수익·안전 최적 균형</span>
-              </div>
-              <div class="ai-btn-rec-badge">추천</div>
-            </button>
-            <button class="ai-btn ai-btn-momentum" onclick="applyAIRecommend('momentum')">
-              <div class="ai-btn-icon-wrap">
-                <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 3L7 18H15L13 29L25 13H17Z" fill="currentColor" fill-opacity=".2"/></svg>
-              </div>
-              <div class="ai-btn-text">
-                <span class="ai-btn-name">모멘텀 집중형</span>
-                <span class="ai-btn-desc">최근 강세 집중</span>
-              </div>
-            </button>
-          </div>
-          <div id="aiResultBox" class="ai-result-box" style="display:none;"></div>
-        </div>
+function calc(){
+  const p=PRODUCTS[prod],A=amount(),rows=simulate(p,A,rate);
+  const at=y=>rows[y-1], paidAll=p.type==='M'?A*12*p.payY:A;
+  $('kPrin').textContent=man(paidAll)+'원';$('kPrinS').textContent=p.type==='M'?`월 ${man(A)}원 × ${p.payY}년`:'일시납';
+  [10,20].forEach(y=>{const r=at(y);$('k'+y).textContent=man(r.acc)+'원';$('k'+y+'s').textContent=`낸 돈의 ${(r.acc/r.paid*100).toFixed(0)}%`});
+  const be=rows.find(r=>r.y>=1&&r.acc>=r.paid);$('kBe').textContent=be?be.y+'년차':'30년 내 없음';
+  $('tRate').textContent=(+rate).toFixed(1);
+  const show=[1,2,3,4,5,6,7,8,9,10,12,15,20,25,30];
+  $('tbl').innerHTML='<tr><th>경과</th><th>나이</th><th>낸 돈 누계</th><th>적립액</th><th>평가손익</th><th>적립률</th></tr>'+
+    show.map(y=>{const r=at(y),g=r.acc-r.paid,age=(+$('cAge').value||0)+y;return `<tr class="${y===10||y===20?'hl':''}"><td>${y}년</td><td>${age?age+'세':''}</td><td>${won(r.paid)}</td><td><b>${won(r.acc)}</b></td><td class="${g>=0?'pos':'neg'}">${g>=0?'+':''}${won(g)}</td><td>${(r.acc/r.paid*100).toFixed(1)}%</td></tr>`}).join('');
+  const rs=[0,2.5,3.75,5,7,10];
+  $('cmp').innerHTML='<tr><th>연수익률</th><th>5년</th><th>10년</th><th>15년</th><th>20년</th><th>30년</th></tr>'+
+    rs.map(v=>{const s=simulate(p,A,v);return `<tr class="${v==rate?'hl':''}"><td>${v}%</td>${[5,10,15,20,30].map(y=>`<td>${man(s[y-1].acc)}<br><span style="font-size:11px;color:var(--ink3)">${(s[y-1].acc/s[y-1].paid*100).toFixed(0)}%</span></td>`).join('')}</tr>`}).join('');
+  drawChart(rows);
+  $('pTitle').textContent=`${$('cName').value.trim()||'고객'}님 ${p.name} 적립 예상`;
+}
+function drawChart(rows){
+  const labels=rows.map(r=>r.y+'년');
+  const data={labels,datasets:[
+    {label:'적립액 (연 '+(+rate).toFixed(1)+'%)',data:rows.map(r=>Math.round(r.acc)),borderColor:'#B8743A',backgroundColor:'rgba(184,116,58,.12)',fill:'origin',borderWidth:3,pointRadius:0,tension:.25},
+    {label:'낸 돈 누계',data:rows.map(r=>r.paid),borderColor:'#0F4C45',borderWidth:2,pointRadius:0,borderDash:[6,4]}
+  ]};
+  const opt={responsive:true,maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+won(c.parsed.y)+'원'}}},scales:{y:{ticks:{callback:v=>man(v)}}}};
+  if(chart){chart.data=data;chart.update()}else chart=new Chart($('chart'),{type:'line',data,options:opt});
+}
+function doPrint(){$('pDate').textContent='한호자산연구소 · '+new Date().toLocaleDateString('ko-KR');chart.resize(680,300);setTimeout(()=>{window.print();chart.resize()},200)}
 
-        <div class="fund-table-wrap">
-          <table class="fund-ratio-table">
-            <thead>
-              <tr>
-                <th>펀드명</th>
-                <th>유형</th>
-                <th>1개월</th>
-                <th>3개월</th>
-                <th>1년</th>
-                <th>3년</th>
-                <th>비율(%)</th>
-              </tr>
-            </thead>
-            <tbody id="fundRatioBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- 우측: 포트폴리오 미리보기 -->
-    <aside class="preview-panel">
-      <div class="preview-card">
-        <div class="preview-title"><i class="fa-solid fa-pie-chart"></i> 포트폴리오 미리보기</div>
-        <div class="chart-container" style="height:240px;">
-          <canvas id="pieChart"></canvas>
-        </div>
-        <div id="pieChartLegend" class="pie-legend"></div>
-      </div>
-
-      <div class="preview-card expected-return-card">
-        <div class="preview-title"><i class="fa-solid fa-percent"></i> 가중평균 예상수익률</div>
-        <div class="return-grid">
-          <div class="return-item">
-            <div class="return-label">1년 평균</div>
-            <div class="return-value" id="avgReturn1y">-</div>
-          </div>
-          <div class="return-item">
-            <div class="return-label">3년 평균</div>
-            <div class="return-value" id="avgReturn3y">-</div>
-          </div>
-          <div class="return-item">
-            <div class="return-label">5년 추정</div>
-            <div class="return-value" id="avgReturn5y">-</div>
-          </div>
-        </div>
-        <p class="return-notice">※ 과거 수익률 기반 참고치이며 미래 수익을 보장하지 않습니다</p>
-      </div>
-
-      <div id="expenseBannerSide" class="exp-banner exp-side off"></div>
-
-      <button class="generate-btn" id="generateBtn" onclick="generateProposal()">
-        <i class="fa-solid fa-file-lines"></i> 제안서 생성하기
-      </button>
-    </aside>
-  </main>
-  <footer class="hh-foot"><div class="hh-in"><b>한호자산연구소</b> · 한호 변액설계 2.0.0<span>※ 과거 수익률 기반 참고용 시뮬레이션이며 미래 수익을 보장하지 않습니다.</span></div></footer>
-</div>
-<div id="page2" class="page">
-  <header class="hh-bar page2-header">
-    <div class="hh-in">
-      <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> 다시 설정</button>
-      <div class="proposal-title-area">
-        <div id="proposalMainTitle" class="proposal-main-title"></div>
-        <div class="proposal-sub-title">변액보험 맞춤 투자 제안서 · 작성일: <span id="proposalSubDate"></span></div>
-      </div>
-      <button class="print-btn" onclick="printToPDF()"><i class="fa-solid fa-print"></i> 인쇄 / PDF</button>
-    </div>
-  </header>
-  <main class="page2-main">
-
-    <!-- ══════════════════════════════════════════════════
-         NEW LAYOUT: 2열 — 좌: 프로파일+포트폴리오 / 우: 시뮬레이션
-         ══════════════════════════════════════════════════ -->
-    <section class="result-section p2-top-section">
-
-      <!-- ── 좌측: 고객 투자 프로파일 + 선택 포트폴리오 ── -->
-      <div class="p2-left-col">
-        <!-- 고객 투자 프로파일 -->
-        <div class="p2-profile-wrap">
-          <h2 class="section-title profile-section-title" id="profileSectionTitle">
-            <i class="fa-solid fa-address-card"></i> 고객 투자 프로파일
-          </h2>
-          <div class="profile-box" id="profileBox"></div>
-        </div>
-
-        <!-- 선택 포트폴리오 (도넛 + 펀드 리스트) -->
-        <div class="p2-portfolio-wrap">
-          <h2 class="section-title"><i class="fa-solid fa-chart-pie"></i> 선택 포트폴리오</h2>
-          <div class="portfolio-wrap-v2">
-            <div class="portfolio-donut-center">
-              <div class="donut-canvas-wrap">
-                <canvas id="pieChart2"></canvas>
-              </div>
-            </div>
-            <div id="portfolioList" class="portfolio-list-v2"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 우측: 미래 예상 적립액 시뮬레이션 ── -->
-      <div class="p2-right-col">
-        <div class="p2-sim-wrap">
-          <h2 class="section-title">
-            <i class="fa-solid fa-chart-line"></i> 미래 예상 적립액
-            <span id="expenseStatusBadge"></span>
-          </h2>
-
-          <!-- 예상 연평균 수익률 박스 -->
-          <div class="sim-avg-rate-box">
-            <span class="sim-avg-rate-label">예상 연평균 수익률</span>
-            <span class="sim-avg-rate-value" id="simAvgRateDisplay">-</span>
-          </div>
-
-          <!-- 기준 산출식 (작은 텍스트) -->
-          <div class="sim-basis-row">
-            <span class="sim-basis" id="simBasis"></span>
-          </div>
-
-          <!-- 사업비 배너 -->
-          <div id="expenseBannerArea"></div>
-
-          <!-- 라인 차트 -->
-          <div class="sim-line-chart-wrap" style="height:300px; position:relative;">
-            <canvas id="simLineChart"></canvas>
-          </div>
-
-          <!-- 하단 4개 카드 (1년후/3년후/5년후/10년후) -->
-          <div class="sim-cards-row" id="simCardsRow"></div>
-
-          <!-- 시뮬레이션 테이블 (텍스트 수치) -->
-          <div class="sim-table-wrap" style="margin-top:16px;">
-            <table class="sim-table" id="simTable"></table>
-            <div id="expenseBreakdownArea"></div>
-          </div>
-
-          <!-- bar 차트용 (숨김, 데이터 유지용) -->
-          <div style="display:none;">
-            <canvas id="simChart"></canvas>
-          </div>
-
-          <p class="sim-notice">※ 과거 운용 성과 기반 참고용 수치이며, 실제 투자 성과와 다를 수 있습니다.</p>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- 섹션2: 편입 펀드 상세정보 -->
-    <section class="result-section funds-section">
-      <h2 class="section-title"><i class="fa-solid fa-magnifying-glass-chart"></i> 편입 펀드 상세정보</h2>
-      <div id="fundDetailCards" class="fund-detail-cards"></div>
-    </section>
-
-    <!-- 섹션4: 유가증권 안내 -->
-    <section class="result-section securities-section">
-      <div class="securities-box">
-        <div class="securities-icon"><i class="fa-solid fa-certificate"></i></div>
-        <div class="securities-content">
-          <h3>💼 변액보험 — '움직이는 유가증권'을 품은 절세 자산관리 솔루션</h3>
-          <p>변액보험은 단순한 보장 상품이 아닙니다. <strong>국내외 ETF·펀드 등 유가증권</strong>에 직접 투자하면서도,
-          보험계약법상 <strong>10년 이상 유지 시 보험차익 비과세(소득세법 §46, 보험업법 §4)</strong> 혜택이 적용되는
-          <em>세금 효율이 탁월한 장기 자산 축적 수단</em>입니다.</p>
-          <div class="securities-points">
-            <div class="sp-item"><i class="fa-solid fa-check-circle"></i> <strong>비과세 혜택</strong>: 10년 이상 유지 시 이자·배당 소득세 면제 <span class="law">(소득세법 제46조)</span></div>
-            <div class="sp-item"><i class="fa-solid fa-check-circle"></i> <strong>금융소득 분리</strong>: 금융소득종합과세 합산 대상에서 제외 <span class="law">(소득세법 제14조)</span></div>
-            <div class="sp-item"><i class="fa-solid fa-check-circle"></i> <strong>유가증권 투자</strong>: 국내외 ETF·주식형 펀드에 직접 연동되는 수익 구조</div>
-            <div class="sp-item"><i class="fa-solid fa-check-circle"></i> <strong>펀드 변경</strong>: 시장 상황에 따라 연 12회 무료 펀드 재배분 가능</div>
-          </div>
-          <p class="securities-closing">🎯 <em>"주식은 이길 때 기쁘고, 변액은 이길 때 세금을 안 냅니다."</em> — 그것이 유가증권을 변액에 담는 이유입니다.</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="page2-footer"><p>한호자산연구소 · 본 자료는 상담 참고용이며 실제 적립금·해지환급금은 상품 설계서와 약관을 따릅니다.</p></footer>
-</div>
-<script src="js/data.v16.js?v=2.0.0"></script>
-<script src="js/fund-latest.js?v=2.0.0"></script>
-<script src="js/fund-merge.js?v=2.0.0"></script>
-<script src="js/config.js?v=2.0.0"></script>
-<script src="js/main.v18.js?v=2.0.0"></script>
-<script src="js/cp-expense.js?v=2.0.0"></script>
-<script src="js/cp-print.js?v=2.0.0"></script>
-<script>document.getElementById('hhToday').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});</script>
+$('today').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+$('rate').addEventListener('input',e=>setRate(+e.target.value));
+$('amt').addEventListener('input',e=>{const v=amount();e.target.value=v?v.toLocaleString('ko-KR'):'';renderProds();calc()});
+['cName','cAge'].forEach(id=>$(id).addEventListener('input',calc));
+renderProds();renderRateChips();resetW();calc();
+</script>
 </body>
 </html>
