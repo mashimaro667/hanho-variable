@@ -267,7 +267,7 @@ function amountFormatInput(el) {
 
 function getMonthlyAmount() {
   const val = document.getElementById("monthlyAmount").value.replace(/,/g, "");
-  return parseFloat(val) || 300000;
+  return parseFloat(val) || 500000;
 }
 
 // ─── 금액 단축 버튼 ──────────────────────────────
@@ -341,12 +341,12 @@ function toggleMokiLumpUI(isMoki, resetMode = false) {
   } else {
     label.innerHTML    = '<i class="fa-solid fa-won-sign"></i> 월 납입금액';
     unitEl.textContent = "원 / 월";
-    input.placeholder  = "300,000";
+    input.placeholder  = "500,000";
     notice.style.display   = "none";
     // 초기화 버튼은 상시 노출 유지
     if (resetMode) {
       // 다른 상품(레벨UP·적립식)으로 전환 → 금액 초기화 + monthly 모드
-      input.value = "300,000";
+      input.value = "500,000";
       input.setAttribute('data-mode', 'monthly');
     }
     // resetMode=false(모키일시납 체크 OFF만): 금액 유지 + data-mode="lump" 유지
@@ -379,7 +379,7 @@ function onCrossCheckChange() {
         id: f.id,
         ratio: parseFloat(document.getElementById("ratio_" + f.id)?.value) || 0
       })),
-      amount: document.getElementById("monthlyAmount")?.value || "300,000",
+      amount: document.getElementById("monthlyAmount")?.value || "500,000",
       dataMode: document.getElementById("monthlyAmount")?.getAttribute("data-mode") || "monthly"
     };
 

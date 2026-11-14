@@ -57,7 +57,7 @@
   function setLump(on) {
     const amt = $('monthlyAmount');
     HH.lump = on;
-    amt.value = on ? '0' : '300,000';   // 일시납: 0에서 금액 버튼을 눌러 합산
+    amt.value = on ? '0' : '500,000';   // 일시납: 0에서 금액 버튼을 눌러 합산
     amt.setAttribute('data-mode', on ? 'lump' : 'monthly');
     apply();
   }
@@ -66,7 +66,7 @@
     if (k === 'expense') { if (HH.cross) return; HH.expense = !HH.expense; apply(); return; }
     if (k === 'cross') {
       HH.cross = !HH.cross;
-      if (HH.cross) { HH.pair = []; HH.lump = false; $('monthlyAmount').value = '300,000'; $('monthlyAmount').setAttribute('data-mode', 'monthly'); }
+      if (HH.cross) { HH.pair = []; HH.lump = false; $('monthlyAmount').value = '500,000'; $('monthlyAmount').setAttribute('data-mode', 'monthly'); }
       else if (HH.pair.length) HH.product = HH.pair[HH.pair.length - 1];
       apply(); return;
     }
@@ -77,7 +77,7 @@
       HH.pair.sort((a, b) => (a === 'levelup' ? -1 : b === 'levelup' ? 1 : 0));
       render(); return;
     }
-    if (k === 'levelup' && HH.lump) { HH.lump = false; $('monthlyAmount').value = '300,000'; }
+    if (k === 'levelup' && HH.lump) { HH.lump = false; $('monthlyAmount').value = '500,000'; }
     HH.product = k;
     apply();
   }
