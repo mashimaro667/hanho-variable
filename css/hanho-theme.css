@@ -143,3 +143,7 @@ body.hanho .preview-card .legend-pct{color:var(--hh-cu)!important;font-weight:80
   body.hanho .preview-panel{grid-template-columns:minmax(0,1fr)!important}
   body.hanho .step-card{padding:16px 14px!important}
 }
+/* 2.1.3 AI 버튼 '탭하여 적용' 띠가 버튼 이름 위에 겹치던 문제 → 버튼 맨 아래 줄로 따로 */
+body.hanho .ai-btn{padding-bottom:0!important;min-height:0!important;justify-content:flex-start!important}
+body.hanho .ai-btn::before{position:static!important;order:99;align-self:stretch;margin:6px -12px 0;padding:5px 0!important;background:var(--hh-paper2)!important;color:var(--hh-cu)!important;font-size:11px!important;border-top:1px solid var(--hh-line)}
+body.hanho .ai-btn-name{color:var(--hh-ink)!important;font-weight:800}
