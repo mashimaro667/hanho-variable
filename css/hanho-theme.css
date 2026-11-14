@@ -147,3 +147,13 @@ body.hanho .preview-card .legend-pct{color:var(--hh-cu)!important;font-weight:80
 body.hanho .ai-btn{padding-bottom:0!important;min-height:0!important;justify-content:flex-start!important}
 body.hanho .ai-btn::before{position:static!important;order:99;align-self:stretch;margin:6px -12px 0;padding:5px 0!important;background:var(--hh-paper2)!important;color:var(--hh-cu)!important;font-size:11px!important;border-top:1px solid var(--hh-line)}
 body.hanho .ai-btn-name{color:var(--hh-ink)!important;font-weight:800}
+/* 2.1.5 사업비 반영 켜기/끄기 버튼 */
+body.hanho #expenseBanner.hh-exp-toggle{display:inline-flex!important;align-items:center;gap:10px;width:auto!important;padding:9px 16px!important;margin:4px 0 2px;border:1.5px solid var(--hh-line2)!important;border-radius:999px!important;background:#fff!important;cursor:pointer;user-select:none;box-shadow:none!important}
+body.hanho #expenseBanner.hh-exp-toggle b{font-size:14px;color:var(--hh-ink3)!important}
+body.hanho #expenseBanner.hh-exp-toggle small{font-size:12px;color:var(--hh-ink3)!important}
+body.hanho #expenseBanner .sw{width:40px;height:22px;border-radius:999px;background:#CFC6B2;position:relative;flex-shrink:0}
+body.hanho #expenseBanner .sw i{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+body.hanho #expenseBanner.on{border-color:var(--hh-em)!important;background:var(--hh-em3)!important}
+body.hanho #expenseBanner.on b{color:var(--hh-em)!important}
+body.hanho #expenseBanner.on .sw{background:var(--hh-em)}
+body.hanho #expenseBanner.on .sw i{left:21px}

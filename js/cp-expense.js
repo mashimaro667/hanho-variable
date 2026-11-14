@@ -1,40 +1,53 @@
 // =====================================================
-// 사업비 반영 상태를 눈에 띄게 보여 준다 (2026-09-21 상무님: "상품을 선택하면 사업비가 반영된 것을 육안으로 알 수 있게, 너무 작아서 찾기 힘들다")
-//  · STEP2 상품 카드 아래 큰 안내 띠 + 오른쪽 미리보기 옆 상태 카드 — 어떤 상품을 골랐는지, 반영 중인지 한눈에
-//  · 계산 로직은 건드리지 않는다. 체크박스 상태(레벨UP·모키적립식·모키일시납·동시체크)를 읽어서 표시만 한다.
+// 사업비 반영 켜기/끄기 버튼 (한호 2.1.5, 2026-11-14 주성씨 지시: "사업비 반영 중 너무 길어, 그냥 사업비 반영 버튼 만들고 켰다 껐다 되게")
+//  · 긴 안내 띠 대신 [사업비 반영 ON/OFF] 버튼 하나. 누르면 고른 상품(레벨UP·모키적립식·모키일시납)의 사업비를 켜고 끈다.
+//  · 상품 버튼을 누르면 자동으로 켜진다. 끌 때 고른 상품을 기억해 두었다가 다시 켤 때 그 상품으로 켠다.
 // =====================================================
 (function () {
   const $ = id => document.getElementById(id);
-  const on = id => !!($(id) && $(id).checked);
+  const IDS = { levelup: 'levelupCheck', standard: 'expenseCheck', moki: 'mokiCheck' };
+  const NAME = { levelup: '레벨UP', standard: '모키적립식', moki: '모키일시납' };
+  let remembered = 'standard';
 
-  function state() {
-    if (on('crossCheck'))   return { k: 'cross',    name: '동시체크 비교', icon: 'fa-code-compare', sub: '레벨UP과 모키적립식의 사업비를 각각 반영해 나란히 비교합니다' };
-    if (on('levelupCheck')) return { k: 'levelup',  name: '레벨UP',       icon: 'fa-rocket',       sub: '계약체결·관리 비용이 차감된, 실제에 가까운 예상값으로 계산합니다' };
-    if (on('mokiCheck'))    return { k: 'moki',     name: '모키일시납',   icon: 'fa-piggy-bank',   sub: '일시납 상품의 사업비가 차감된 예상값으로 계산합니다' };
-    if (on('expenseCheck')) return { k: 'standard', name: '모키적립식',   icon: 'fa-seedling',     sub: '적립식 상품의 사업비가 차감된 예상값으로 계산합니다' };
-    return { k: 'none', name: '', icon: '', sub: '위에서 상품(레벨UP·모키적립식·모키일시납)을 선택하면 사업비가 반영된 미래값으로 계산됩니다' };
+  function current() {
+    if ($('crossCheck')?.checked) return 'cross';
+    for (const k in IDS) if ($(IDS[k])?.checked) return k;
+    return null;
   }
 
-  let last = null;
+  function toggle() {
+    const k = current();
+    if (k === 'cross') { $('crossCheck').checked = false; onCrossCheckChange(); render(); return; }
+    if (k) {                       // 끄기
+      remembered = k;
+      $(IDS[k]).checked = false;
+      if (k === 'levelup') { toggleLevelupUI(false); validateRatios(); updateExpenseStatusBadge(); }
+      else onExpenseGroupChange(k); // 모키적립식·일시납: 원래 함수가 끈 상태(일시납은 금액 유지)로 정리
+    } else {                       // 켜기
+      const el = $(IDS[remembered]);
+      el.checked = true;
+      if (remembered === 'moki') onExpenseGroupChange('moki');
+      else onExpenseGroupChange(remembered);
+    }
+    render();
+  }
+
   function render() {
-    const s = state();
-    ['expenseBanner', 'expenseBannerSide'].forEach(id => {
-      const el = $(id);
-      if (!el) return;
-      const side = id === 'expenseBannerSide';
-      const isOn = s.k !== 'none';
-      el.className = 'exp-banner' + (side ? ' exp-side' : '') + (isOn ? ' on' : ' off') + (isOn && last !== s.k ? ' flash' : '');
-      el.innerHTML = isOn
-        ? `<i class="fa-solid fa-circle-check"></i><div><b>${s.name} 사업비 반영 중</b><span>${s.sub}</span></div>`
-        : `<i class="fa-regular fa-circle-xmark"></i><div><b>사업비 미반영</b><span>${s.sub}</span></div>`;
-    });
-    last = s.k;
+    const el = $('expenseBanner');
+    if (!el) return;
+    const k = current();
+    if (k && k !== 'cross') remembered = k;
+    const on = !!k;
+    el.className = 'hh-exp-toggle' + (on ? ' on' : '');
+    el.setAttribute('role', 'switch'); el.setAttribute('aria-checked', on);
+    el.innerHTML = `<span class="sw"><i></i></span><b>사업비 반영 ${on ? 'ON' : 'OFF'}</b><small>${k === 'cross' ? '동시체크' : NAME[k || remembered]}</small>`;
   }
 
-  // 상품을 누르면 기존 코드가 다른 체크를 끄는 등 바로 뒤에 상태가 바뀌므로, 클릭이 끝난 뒤 한 번 더 읽는다.
+  window.hhExpToggle = toggle;
   document.addEventListener('click', () => setTimeout(render, 0), true);
   document.addEventListener('change', () => setTimeout(render, 0), true);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', render); else render();
+  function init() { const el = $('expenseBanner'); if (el) el.onclick = toggle; render(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
   setTimeout(render, 800);
   window.cpExpenseRender = render;
 })();
