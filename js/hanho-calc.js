@@ -51,8 +51,12 @@ const HANHO_LV_C = [0.34099, 0.37161, 0.37155, 0.37149, 0.37226, 0.37291, 0.3737
 const HANHO_LV_PAYY = 20, HANHO_LV_GUAR = 0.015;
 const hanhoM = r => Math.pow(Math.max(1 + r, 0), 1 / 12) - 1;
 
-function calcWithExpense(monthly, annualBase, targetYear) {
-  const p = HANHO_SAVE, m = hanhoM(annualBase - HANHO_GUAR);
+// 모키연금 (신한모으고키우는변액연금보험 상품설명서 2026-11-14): 월납 체결 5.89% + 관리 3.00%, 일시납 최초 1.577%·2~15회 0.127%·이후 0.084%
+const HANHO_ANN = { fee: 0.0589, mng: 0.0300, risk: 0.00002, after: 0.016, payY: 10 };
+const HANHO_ANN_LUMP = { first: 0.01577, m2: 0.00127, m3: 0.00084, risk: 0 };
+
+function hhMonthlyEngine(p, monthly, annualBase, targetYear) {
+  const m = hanhoM(annualBase - HANHO_GUAR);
   let a = 0, exp = 0;
   for (let k = 1; k <= targetYear * 12; k++) {
     if (k <= p.payY * 12) { const d = monthly * (p.fee + p.mng + p.risk); a += monthly - d; exp += d; }
@@ -61,9 +65,8 @@ function calcWithExpense(monthly, annualBase, targetYear) {
   }
   return { fv: a, totalExpense: exp, totalPrincipal: monthly * Math.min(targetYear, p.payY) * 12 };
 }
-
-function calcWithExpenseMokiLump(lumpsum, annualBase, targetYear) {
-  const p = HANHO_LUMP, m = hanhoM(annualBase - HANHO_GUAR);
+function hhLumpEngine(p, lumpsum, annualBase, targetYear) {
+  const m = hanhoM(annualBase - HANHO_GUAR);
   let a = 0, exp = 0;
   for (let k = 1; k <= targetYear * 12; k++) {
     if (k === 1) { exp += lumpsum * p.first; a = lumpsum - lumpsum * p.first; }
@@ -72,8 +75,7 @@ function calcWithExpenseMokiLump(lumpsum, annualBase, targetYear) {
   }
   return { fv: a, totalExpense: exp, principal: lumpsum };
 }
-
-function calcWithExpenseLevelup(monthly, annualBase, targetYear) {
+function hhLevelupEngine(monthly, annualBase, targetYear) {
   let a = 0, exp = 0, j = 0;
   for (let k = 1; k <= targetYear * 12; k++) {
     while (j < HANHO_LV_K.length - 1 && HANHO_LV_K[j] < k) j++;
@@ -85,6 +87,28 @@ function calcWithExpenseLevelup(monthly, annualBase, targetYear) {
   }
   return { fv: a, totalExpense: exp, totalPrincipal: monthly * Math.min(targetYear, HANHO_LV_PAYY) * 12 };
 }
+// 상품 k의 월납 계산 (levelup·save·annuity)
+function hhEngineFor(k) {
+  if (k === 'levelup') return hhLevelupEngine;
+  return (m, r, y) => hhMonthlyEngine(k === 'annuity' ? HANHO_ANN : HANHO_SAVE, m, r, y);
+}
+const hhState = () => window.HH || { product: 'save', cross: false, pair: [] };
+
+// 원본 화면이 부르는 이름들. 상품(적립·연금)과 동시체크 비교 상품에 따라 엔진을 고른다.
+// 동시체크 화면은 '레벨UP 칸 = 첫 상품', '모키적립식 칸 = 둘째 상품'으로 쓴다.
+function calcWithExpense(monthly, annualBase, targetYear) {
+  const s = hhState();
+  if (s.cross && s.pair.length === 2) return hhEngineFor(s.pair[1])(monthly, annualBase, targetYear);
+  return hhEngineFor(s.product === 'annuity' ? 'annuity' : 'save')(monthly, annualBase, targetYear);
+}
+function calcWithExpenseLevelup(monthly, annualBase, targetYear) {
+  const s = hhState();
+  if (s.cross && s.pair.length === 2) return hhEngineFor(s.pair[0])(monthly, annualBase, targetYear);
+  return hhLevelupEngine(monthly, annualBase, targetYear);
+}
+function calcWithExpenseMokiLump(lumpsum, annualBase, targetYear) {
+  return hhLumpEngine(hhState().product === 'annuity' ? HANHO_ANN_LUMP : HANHO_LUMP, lumpsum, annualBase, targetYear);
+}
 
 // 사업비 미반영 참고값도 같은 월 복리 방식으로
 function calcWithoutExpense(monthly, annualBase, targetYear) {
@@ -95,3 +119,14 @@ function calcWithoutExpense(monthly, annualBase, targetYear) {
 function calcWithoutExpenseLumpsum(lumpsum, annualBase, targetYear) {
   return lumpsum * Math.pow(Math.max(1 + annualBase, 0), targetYear);
 }
+
+// 동시체크 표 머리글: 비교 상품 이름·비용 설명 (상품설명서 기준)
+const HH_FULL = { levelup: '신한변액유니버설종신 레벨업', save: '모으고키우는변액적립 v2.0', annuity: '모으고키우는변액연금' };
+const HH_COST = {
+  levelup: '설명서 적립액 예시(20년납)에 맞춘 비용 · 6년까지 보험료의 약 37% · 10년 내 보증 연 1.5%',
+  save: '납입 중 보험료의 7.88% (체결 5.13+관리 2.75) · 납입 후 월 보험료의 1.6%',
+  annuity: '납입 중 보험료의 8.89% (체결 5.89+관리 3.00) · 납입 후 월 보험료의 1.6%'
+};
+function hhCrossKey(i) { const s = hhState(); return (s.cross && s.pair.length === 2) ? s.pair[i] : (i === 0 ? 'levelup' : 'save'); }
+function hhProdFull(i) { return HH_FULL[hhCrossKey(i)]; }
+function hhProdCost(i) { return HH_COST[hhCrossKey(i)]; }

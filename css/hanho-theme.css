@@ -157,3 +157,25 @@ body.hanho #expenseBanner.on{border-color:var(--hh-em)!important;background:var(
 body.hanho #expenseBanner.on b{color:var(--hh-em)!important}
 body.hanho #expenseBanner.on .sw{background:var(--hh-em)}
 body.hanho #expenseBanner.on .sw i{left:21px}
+/* 2.2.0 상품 선택 줄 */
+body.hanho .step-header{flex-wrap:wrap}
+body.hanho .hh-prod-row{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;align-items:center}
+body.hanho .hh-pbtn{display:inline-flex!important;align-items:center;gap:5px;padding:7px 12px!important;border:1.5px solid #CFC6B2!important;border-radius:999px!important;background:#fff!important;color:#4B5752!important;font-size:13px!important;font-weight:700!important;cursor:pointer;white-space:nowrap;line-height:1.2;box-shadow:none!important;width:auto!important}
+body.hanho .hh-pbtn i{font-size:12px;color:#B8743A!important}
+body.hanho .hh-pbtn.on{background:#0F4C45!important;border-color:#0F4C45!important;color:#fff!important}
+body.hanho .hh-pbtn.on i{color:#F3E5D6!important}
+body.hanho .hh-pbtn.hh-cross.on{background:#B8743A!important;border-color:#B8743A!important}
+body.hanho .hh-pbtn.hh-exp{border-style:dashed!important}
+body.hanho .hh-pbtn.hh-exp.on{background:#E3EFEC!important;border:1.5px solid #0F4C45!important;color:#0F4C45!important}
+body.hanho .hh-pbtn.hh-exp.on::before{content:'✓ '}
+body.hanho .hh-pbtn.locked{opacity:.6;cursor:default}
+body.hanho .hh-prod-hint{width:100%;text-align:right;font-size:12px;color:#8A918C;margin-top:4px}
+body.hanho .hh-prod-hint b{color:#0F4C45}
+body.hanho .hh-lump-btn{border-style:dashed!important;color:#B8743A!important;font-weight:800!important}
+body.hanho .hh-lump-btn.on{background:#B8743A!important;color:#fff!important;border-style:solid!important;border-color:#B8743A!important}
+body.hanho .amount-input-wrap input{min-width:0!important}
+@media (max-width:600px){body.hanho .hh-prod-row{margin-left:0;width:100%}body.hanho .hh-pbtn{padding:7px 10px!important;font-size:12.5px!important}body.hanho .hh-prod-hint{text-align:left}}
+body.hanho .amount-shortcuts button.amt-btn.hh-lump-btn{border:1.5px dashed #B8743A!important;color:#B8743A!important;background:#fff!important}
+body.hanho .amount-shortcuts button.amt-btn.hh-lump-btn.on{background:#B8743A!important;color:#fff!important;border-style:solid!important}
+#page1 .amount-shortcuts button.amt-btn.hh-lump-btn{border:1.5px dashed #B8743A!important;color:#B8743A!important;background:#fff!important;border-radius:999px!important;font-weight:800!important}
+#page1 .amount-shortcuts button.amt-btn.hh-lump-btn.on{background:#B8743A!important;color:#fff!important;border-style:solid!important}

@@ -2396,13 +2396,13 @@ function renderPage2Cross() {
             <thead>
               <tr>
                 <th class="cross-th-year">경과<br>년도</th>
-                <th class="cross-th-lv"><i class="fa-solid fa-rocket"></i> 레벨UP<span class="cx-th-sub">신한변액유니버설종신</span></th>
-                <th class="cross-th-mk"><i class="fa-solid fa-piggy-bank"></i> 모키적립식<span class="cx-th-sub">모으고키우고</span></th>
+                <th class="cross-th-lv"><i class="fa-solid fa-rocket"></i> 레벨UP<span class="cx-th-sub">${hhProdFull(0)}</span></th>
+                <th class="cross-th-mk"><i class="fa-solid fa-piggy-bank"></i> 모키적립식<span class="cx-th-sub">${hhProdFull(1)}</span></th>
               </tr>
               <tr class="cross-expense-row">
                 <td></td>
-                <td class="cx-exp">1~7년(84회) 보장성 37.5%↓5.5% · 8~10년 모키와 동일 · 11년~ 0.55%</td>
-                <td class="cx-exp">1년 7.64%→9년 8.4%↑ · 10년 7.95% · 11년~ 0.55%</td>
+                <td class="cx-exp">${hhProdCost(0)}</td>
+                <td class="cx-exp">${hhProdCost(1)}</td>
               </tr>
             </thead>
             <tbody>

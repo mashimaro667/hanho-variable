@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/cp-pro.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-light.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-print.css?v=2.0.0">
-<link rel="stylesheet" href="css/hanho-theme.css?v=2.1.5">
+<link rel="stylesheet" href="css/hanho-theme.css?v=2.2.2">
 </head>
 <body class="hanho">
 <div id="page1" class="page active">
@@ -65,7 +65,17 @@
       <div class="step-card">
         <div class="step-header">
           <span class="step-num">STEP 2</span>
-          <span class="step-title">월 저축금액 설정</span>
+          <span class="step-title">상품·저축금액 설정</span>
+          <!-- 한호 2.2.0 상품 선택 (원본 체크박스는 아래 숨김 영역에서 계산용으로만 씀) -->
+          <div class="hh-prod-row" id="hhProdRow">
+            <button type="button" class="hh-pbtn hh-cross" data-k="cross"><i class="fa-solid fa-code-compare"></i> 동시체크</button>
+            <button type="button" class="hh-pbtn" data-k="levelup"><i class="fa-solid fa-rocket"></i> 레벨UP</button>
+            <button type="button" class="hh-pbtn" data-k="save"><i class="fa-solid fa-seedling"></i> 모키적립</button>
+            <button type="button" class="hh-pbtn" data-k="annuity"><i class="fa-solid fa-hand-holding-dollar"></i> 모키연금</button>
+            <button type="button" class="hh-pbtn hh-exp" data-k="expense">사업비 반영</button>
+          </div>
+          <div id="hhProdHint" class="hh-prod-hint"></div>
+          <div style="display:none" aria-hidden="true">
           <!-- 사업비 선택 탭 그룹 -->
           <div class="expense-tab-group">
 
@@ -104,7 +114,7 @@
             </div>
 
           </div>
-          <div id="expenseBanner" class="exp-banner off"></div>
+                    </div>
         </div>
         <div class="form-group">
           <!-- 일반 모드 라벨 -->
@@ -124,6 +134,7 @@
 
           <!-- 버튼을 누를 때마다 현재 금액에 합산됩니다 -->
           <div class="amount-shortcuts">
+            <button type="button" class="amt-btn hh-lump-btn" id="hhLumpBtn">일시납</button>
             <button class="amt-btn" id="amtBtn100k"    onclick="handleAmtBtn(100000)">10만</button>
             <button class="amt-btn" id="amtBtn300k"    onclick="handleAmtBtn(300000)">30만</button>
             <button class="amt-btn" id="amtBtn500k"    onclick="handleAmtBtn(500000)">50만</button>
@@ -406,9 +417,9 @@
 <script src="js/fund-latest.js?v=2.0.0"></script>
 <script src="js/fund-merge.js?v=2.0.0"></script>
 <script src="js/config.js?v=2.0.0"></script>
-<script src="js/main.v18.js?v=2.1.4"></script>
-<script src="js/hanho-calc.js?v=2.1.4"></script>
-<script src="js/cp-expense.js?v=2.1.5"></script>
+<script src="js/main.v18.js?v=2.2.0"></script>
+<script src="js/hanho-calc.js?v=2.2.0"></script>
+<script src="js/hh-product.js?v=2.2.0"></script>
 <script src="js/cp-print.js?v=2.0.0"></script>
 <script>document.getElementById('hhToday').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});</script>
 </body>
