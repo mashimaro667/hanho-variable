@@ -96,3 +96,50 @@ body.hanho .page2-main{background:var(--hh-paper)!important}
 .hh-expect-detail th:first-child,.hh-expect-detail td:first-child{text-align:left}.hh-expect-detail small{color:#8A918C}.hh-expect-detail tr.sum td{font-weight:700;background:#F5F2EA}
 .hh-past-title{margin:14px 0 6px;font-size:12px;color:#8A918C;font-weight:600}
 .hh-past .return-value{font-size:18px!important;color:#8A918C!important}
+/* 2.1.2 AI 추천 결과 — 원본 어두운 바탕용 흰 글씨를 밝은 바탕용으로 (휴대폰에서 글자가 안 보이던 문제) */
+body.hanho .ai-result-box{background:#fff!important;border-top:1px solid var(--hh-line)!important;color:var(--hh-ink)!important}
+body.hanho .ai-result-title{color:var(--hh-em)!important;font-size:15px!important}
+body.hanho .ai-result-desc{color:var(--hh-ink2)!important}
+body.hanho .ai-fund-item{flex-wrap:wrap;row-gap:4px;padding:6px 0;border-bottom:1px dashed var(--hh-line)}
+body.hanho .ai-fund-name{color:var(--hh-ink)!important;width:auto!important;flex:1 1 60%;min-width:0}
+body.hanho .ai-fund-bar-wrap{background:var(--hh-paper2)!important;flex:1 1 100%;order:5}
+body.hanho .ai-fund-pct{color:var(--hh-em)!important;width:auto!important}
+body.hanho .ai-fund-ret1y{background:var(--hh-paper)!important}
+body.hanho .ai-fund-ret1y.pos{color:#C0392B!important}body.hanho .ai-fund-ret1y.neg{color:#2F6FDB!important}
+body.hanho .ai-expense-badge{background:var(--hh-em3)!important;color:var(--hh-em)!important;border:1px solid #CFE3DE!important}
+body.hanho .ai-double-check,body.hanho .ai-result-return,body.hanho .ai-sim-preview{background:var(--hh-paper)!important;border:1px solid var(--hh-line)!important}
+body.hanho .ai-dc-title,body.hanho .ai-sim-title{color:var(--hh-cu)!important}
+body.hanho .ai-dc-row{flex-wrap:wrap}
+body.hanho .ai-dc-label,body.hanho .ai-ret-label,body.hanho .ai-sim-yr,body.hanho .ai-sim-p{color:var(--hh-ink2)!important}
+body.hanho .ai-dc-val.pos,body.hanho .ai-ret-value.pos,body.hanho .ai-sim-gain.pos{color:#C0392B!important}
+body.hanho .ai-dc-val.neg,body.hanho .ai-ret-value.neg,body.hanho .ai-sim-gain.neg{color:#2F6FDB!important}
+body.hanho .ai-dc-badge{background:var(--hh-em3)!important;color:var(--hh-em)!important;border:0!important}
+body.hanho .ai-dc-row.ai-dc-final{border-top:1px solid var(--hh-line)!important}
+body.hanho .ai-sim-arrow{color:var(--hh-ink3)!important}
+body.hanho .ai-sim-fv strong{color:var(--hh-ink)!important}
+body.hanho .ai-sim-row{border-bottom:1px solid var(--hh-line)!important}
+body.hanho .ai-sim-exp{color:var(--hh-cu)!important}
+body.hanho .ai-sim-notice{color:var(--hh-ink3)!important;border-top:1px solid var(--hh-line)!important}
+/* 2.1.2 지난 실적은 회색 */
+body.hanho .hh-past .return-value{color:var(--hh-ink3)!important;-webkit-text-fill-color:var(--hh-ink3)!important;font-size:18px!important}
+/* 2.1.2 휴대폰: 가로 넘침·잘림 */
+html,body.hanho{overflow-x:hidden;max-width:100%}
+@media (max-width:600px){
+  .hh-in{padding:10px 14px;gap:10px}
+  .hh-name{font-size:17px}.hh-name small{font-size:9px;letter-spacing:1.5px}
+  .hh-right{font-size:11.5px;text-align:right}
+  body.hanho .ai-btn{min-height:118px;overflow:visible!important}
+  body.hanho .ai-btn-name{font-size:12.5px!important;line-height:1.3;white-space:normal}
+  body.hanho .ai-rec-header{flex-wrap:wrap;gap:8px}
+}
+/* 2.1.2 미리보기 범례 글씨 (원본 어두운 바탕용 흰 글씨) */
+body.hanho .preview-card .fn-top{color:var(--hh-ink)!important}
+body.hanho .preview-card .fn-sub{color:var(--hh-ink3)!important}
+body.hanho .preview-card .legend-pct{color:var(--hh-cu)!important;font-weight:800}
+/* 2.1.2 휴대폰: 카드가 화면 오른쪽으로 밀리던 문제 */
+@media (max-width:900px){
+  body.hanho .page1-main{grid-template-columns:minmax(0,1fr)!important;padding:12px!important}
+  body.hanho .input-panel,body.hanho .preview-panel,body.hanho .step-card,body.hanho .preview-card,body.hanho .generate-btn{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  body.hanho .preview-panel{grid-template-columns:minmax(0,1fr)!important}
+  body.hanho .step-card{padding:16px 14px!important}
+}
