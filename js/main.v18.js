@@ -1691,7 +1691,7 @@ function renderPage2() {
   }).join('');
 
   document.getElementById("simBasis").textContent =
-    `(펀드별 기대수익률 가중평균 연 ${(annualBase * 100).toFixed(2)}% 적용 | 펀드마다 최근 3년 연환산·설정 후 연환산·유형별 상한(주식형 7%) 중 낮은 값 | 참고: 3년 누적 실적 ${wavg3y.toFixed(2)}%)`;
+    `(펀드별 기대수익률 가중평균 연 ${(annualBase * 100).toFixed(2)}% 적용 | 펀드마다 최근 3년 연환산·설정 후 연환산·유형별 상한(주식형 12%) 중 낮은 값 | 참고: 3년 누적 실적 ${wavg3y.toFixed(2)}%)`;
 
   // pf-propose-date 동적 날짜 주입
   const pfDateEl = document.getElementById("pfProposeDate");
@@ -2459,7 +2459,7 @@ function renderSimTable() {
             </div>
             <div class="san-row">
               <span class="san-badge green">시뮬레이션 기준</span>
-              <span>연 <strong>${annual3yPct}%</strong> (펀드별 기대수익률 가중평균) 적용. 과거 실적을 그대로 이어 붙이지 않고 펀드마다 최근 3년·설정 후 연환산·유형별 상한(주식형 7%) 중 낮은 값을 썼습니다.</span>
+              <span>연 <strong>${annual3yPct}%</strong> (펀드별 기대수익률 가중평균) 적용. 과거 실적을 그대로 이어 붙이지 않고 펀드마다 최근 3년·설정 후 연환산·유형별 상한(주식형 12%) 중 낮은 값을 썼습니다.</span>
             </div>
           </div>
         </div>
