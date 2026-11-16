@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/cp-pro.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-light.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-print.css?v=2.0.0">
-<link rel="stylesheet" href="css/hanho-theme.css?v=2.3.1">
+<link rel="stylesheet" href="css/hanho-theme.css?v=2.3.2">
 </head>
 <body class="hanho">
 <div id="page1" class="page active">
@@ -237,7 +237,7 @@
                 <span class="ai-btn-desc">최근 강세 집중</span>
               </div>
             </button>
-            <button class="ai-btn ai-btn-target" onclick="document.getElementById('hhTargetPanel').classList.toggle('open')">
+            <button class="ai-btn ai-btn-target" onclick="document.getElementById('hhTargetPanel').classList.add('open');document.getElementById('hhTargetRate').focus()">
               <div class="ai-btn-icon-wrap">
                 <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="7" fill="currentColor" fill-opacity=".16"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
               </div>
@@ -437,7 +437,7 @@
 <script src="js/config.js?v=2.0.0"></script>
 <script src="js/main.v18.js?v=2.3.0"></script>
 <script src="js/hanho-calc.js?v=2.3.0"></script>
-<script src="js/hh-product.js?v=2.2.3"></script>
+<script src="js/hh-product.js?v=2.3.2"></script>
 <script src="js/cp-print.js?v=2.0.0"></script>
 <script>document.getElementById('hhToday').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});</script>
 </body>

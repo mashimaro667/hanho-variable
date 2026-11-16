@@ -143,6 +143,11 @@
     document.querySelectorAll('#hhProdRow .hh-pbtn').forEach(b => b.addEventListener('click', () => onClick(b.dataset.k)));
     const lb = $('hhLumpBtn'); if (lb) lb.addEventListener('click', () => setLump(!HH.lump));
     ['page2', 'aiResultBox', 'expenseStatusBadge'].forEach(watch);
+    // 2.3.2: AI 버튼 중 '예상 수익률 설정'만 입력 칸을 열고, 다른 버튼을 누르면 닫는다. 고른 버튼은 표시해 둔다.
+    document.querySelectorAll('.ai-rec-types .ai-btn').forEach(b => b.addEventListener('click', () => {
+      if (!b.classList.contains('ai-btn-target')) $('hhTargetPanel')?.classList.remove('open');
+      document.querySelectorAll('.ai-rec-types .ai-btn').forEach(x => x.classList.toggle('hh-picked', x === b));
+    }));
     // 첫 화면: 모키적립 월납 · 사업비 반영
     $('expenseCheck').checked = true;
     apply();
