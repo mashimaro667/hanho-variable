@@ -1060,20 +1060,11 @@ function applyAIRecommend(type) {
     emoji = "🛡️";
     methodName = "안전 우선형 (최소 분산 전략)";
     methodDesc = levelupMode
-      ? "MMF형 20% 고정 후, 나머지 80%를 변동성이 낮은 펀드에 배분하여 리스크를 최소화합니다."
-      : "변동성이 낮은 펀드에 집중 배분하여 리스크를 최소화합니다.";
+      ? "MMF형 20% 고정 후, 나머지를 달러·주식에 나눠 기대 연 5% 안팎으로 맞춘 안정형 편성입니다."
+      : "MMF·달러 위주에 주식을 일부 섞어 기대 연 5% 안팎으로 맞춘 안정형 편성입니다.";
 
-    const invVol = targetStats.map(f => ({ ...f, score: f.volatility > 0 ? 1 / f.volatility : 0 }));
-    const sorted = invVol.sort((a, b) => b.score - a.score).slice(0, 5);
-    const totalScore = sorted.reduce((a, f) => a + f.score, 0);
-    FUND_DATA.forEach(f => { weights[f.id] = 0; });
-    if (totalScore > 0) {
-      sorted.forEach(f => {
-        weights[f.id] = Math.round((f.score / totalScore) * FREE_BUDGET / 5) * 5;
-      });
-    } else {
-      sorted.forEach(f => { weights[f.id] = Math.round(FREE_BUDGET / Math.max(sorted.length, 1) / 5) * 5; });
-    }
+    // 한호 2.4.0: MMF 100%(연 2%)로 쏠리던 것을 기대 연 5% 안팎의 안정형 편성으로 (MMF·달러 위주 + 일부 주식)
+    weights = hhTargetMix(5, levelupMode ? 20 : 0).w;
 
   } else if (type === "balanced") {
     emoji = "🤖";
@@ -1685,7 +1676,7 @@ function renderPage2() {
   }).join('');
 
   document.getElementById("simBasis").textContent =
-    `(펀드별 기대수익률 가중평균 연 ${(annualBase * 100).toFixed(2)}% 적용 | 펀드마다 최근 3년 연환산·설정 후 연환산·유형별 상한(주식형 12%) 중 낮은 값 | 참고: 3년 누적 실적 ${wavg3y.toFixed(2)}%)`;
+    `(펀드별 기대수익률 가중평균 연 ${(annualBase * 100).toFixed(2)}% 적용 | 펀드마다 최근 3년 연환산·설정 후 연환산·중 낮은 값(주식형은 그 75%) | 참고: 3년 누적 실적 ${wavg3y.toFixed(2)}%)`;
 
   // pf-propose-date 동적 날짜 주입
   const pfDateEl = document.getElementById("pfProposeDate");
@@ -2453,7 +2444,7 @@ function renderSimTable() {
             </div>
             <div class="san-row">
               <span class="san-badge green">시뮬레이션 기준</span>
-              <span>연 <strong>${annual3yPct}%</strong> (펀드별 기대수익률 가중평균) 적용. 과거 실적을 그대로 이어 붙이지 않고 펀드마다 최근 3년·설정 후 연환산·유형별 상한(주식형 12%) 중 낮은 값을 썼습니다.</span>
+              <span>연 <strong>${annual3yPct}%</strong> (펀드별 기대수익률 가중평균) 적용. 과거 실적을 그대로 이어 붙이지 않고 펀드마다 최근 3년·설정 후 연환산·중 낮은 값(주식형은 그 75%)을 썼습니다.</span>
             </div>
           </div>
         </div>

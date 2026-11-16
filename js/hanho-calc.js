@@ -19,14 +19,20 @@ const HANHO_CAP = { '주식형': 12, '커머더티형': 5, '기타(달러)': 3, 
 const HANHO_CAP_DEFAULT = 5;
 const HANHO_ASOF = new Date('2026-09-30');
 
+// 2.4.0 (2026-11-17 주성씨 지시: "모든 탭이 수익률이 거의 비슷, 차이가 있게"):
+//   주식형·커머더티형은 장기 실적(3년·설정 후 연환산 중 낮은 값)의 75%만 기대수익률로 쓴다(HANHO_HAIRCUT).
+//   상한 하나에 모두 걸려 같은 숫자가 되던 것을 펀드마다 실적 차이가 남게 바꿈. 채권·달러는 그대로.
+const HANHO_HAIRCUT = { '주식형': 0.75, '커머더티형': 0.75 };
 function hanhoFundRate(f) {
   const r = f.returns || {};
   const c3 = (Math.pow(1 + (r.y3 || 0) / 100, 1 / 3) - 1) * 100;
   const yrs = f.setupDate ? (HANHO_ASOF - new Date(f.setupDate)) / 3.15576e10 : 0;
   const ci = yrs >= 3 && r.inception != null ? (Math.pow(1 + r.inception / 100, 1 / yrs) - 1) * 100 : c3;
   const cap = HANHO_CAP[f.type] != null ? HANHO_CAP[f.type] : HANHO_CAP_DEFAULT;
-  const v = Math.max(0, Math.min(c3, ci, cap));
-  return { rate: v, c3, ci, cap, by: v === cap ? '상한' : (v === ci ? '장기 실적' : '3년 실적') };
+  const hc = HANHO_HAIRCUT[f.type] || 1;
+  const base = Math.min(c3, ci) * hc;
+  const v = Math.max(0, Math.min(base, cap));
+  return { rate: v, c3, ci, cap, by: v === cap ? '상한' : (hc < 1 ? '장기 실적의 75%' : (Math.min(c3, ci) === ci ? '장기 실적' : '3년 실적')) };
 }
 
 // weights: {펀드id: 비율} → 연 기대수익률(소수)
@@ -141,10 +147,11 @@ const HH_SAFE = ['VU40000', 'VU71002'];
 function hhTargetMix(targetPct, mmfFixed) {
   const fixed = mmfFixed || 0, budget = 100 - fixed;
   const r5 = v => Math.round(v / 5) * 5;
+  const baskets = [[0.5, 0.25, 0.25], [1, 0, 0]];   // 성장 묶음: 미국·일본·인덱스 2:1:1, 또는 미국주식형II 단독
   let best = null;
-  for (let g = 0; g <= budget; g += 5) {
+  for (const bk of baskets) for (let g = 0; g <= budget; g += 5) {
     const w = {}; FUND_DATA.forEach(f => { w[f.id] = 0; });
-    const us = r5(g / 2), jp = r5((g - us) / 2), ix = g - us - jp;
+    const us = r5(g * bk[0]), jp = r5((g - us) * (bk[1] / ((bk[1] + bk[2]) || 1))), ix = g - us - jp;
     const s = budget - g, mmf = fixed ? 0 : r5(s * 2 / 3), usd = s - mmf; // MMF 고정 모드는 원본이 MMF를 20%로 다시 맞추므로 안정 몫은 달러로
     w[HH_GROWTH[0]] = us; w[HH_GROWTH[1]] = jp; w[HH_GROWTH[2]] = ix;
     w[HH_SAFE[0]] = mmf + fixed; w[HH_SAFE[1]] = usd;
