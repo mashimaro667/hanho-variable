@@ -139,6 +139,30 @@
     return origGen.apply(this, arguments);
   };
 
+  // 2.4.1 (2026-11-17 주성씨 지시: "밑에 직접 설정하면 위에 연평균수익률이 설정에 따라 바뀌게")
+  //   슬라이더·숫자 입력·직접 설정 버튼(안정형 등)·초기화로 비율을 바꾸면 위 AI 결과 칸을 '직접 설정'으로 다시 그린다.
+  const PRESET_NAME = { stable: '안정형', balanced: '균형형', growth: '성장형', aggressive: '공격형' };
+  let manualTimer = null, manualLabel = '';
+  function refreshManual() {
+    clearTimeout(manualTimer);
+    manualTimer = setTimeout(() => {
+      const w = hanhoWeightsFromDom();
+      const total = Object.values(w).reduce((a, b) => a + b, 0);
+      if (Math.abs(total - 100) > 0.5) return;           // 합계 100%일 때만
+      showAIResult('manual', w, '✋', '직접 설정' + (manualLabel ? ' · ' + manualLabel : ''),
+        '아래에서 직접 맞춘 비율로 계산한 기대 연수익률과 예상 적립액입니다.', calcFundStats());
+      document.querySelectorAll('.ai-rec-types .ai-btn').forEach(x => x.classList.remove('hh-picked'));
+      $('hhTargetPanel')?.classList.remove('open');
+    }, 200);
+  }
+  function wrapManual(name, label) {
+    const orig = window[name]; if (typeof orig !== 'function') return;
+    window[name] = function () { const r = orig.apply(this, arguments); manualLabel = label ? label(arguments) : ''; refreshManual(); return r; };
+  }
+  wrapManual('syncInputFromSlider'); wrapManual('syncSliderFromInput');
+  wrapManual('applyPreset', a => PRESET_NAME[a[0]] || a[0]);
+  wrapManual('resetRatios', () => '초기화');
+
   function init() {
     document.querySelectorAll('#hhProdRow .hh-pbtn').forEach(b => b.addEventListener('click', () => onClick(b.dataset.k)));
     const lb = $('hhLumpBtn'); if (lb) lb.addEventListener('click', () => setLump(!HH.lump));
