@@ -130,3 +130,26 @@ const HH_COST = {
 function hhCrossKey(i) { const s = hhState(); return (s.cross && s.pair.length === 2) ? s.pair[i] : (i === 0 ? 'levelup' : 'save'); }
 function hhProdFull(i) { return HH_FULL[hhCrossKey(i)]; }
 function hhProdCost(i) { return HH_COST[hhCrossKey(i)]; }
+
+
+// ── 예상 수익률 설정 (2.3.0, 2026-11-16 주성씨 지시: "수치를 입력하면 적당히 편성되게") ──
+// 성장 묶음(미국주식형II 1/2 · 일본주식형 1/4 · 인덱스주식형II 1/4)과
+// 안정 묶음(MMF형 2/3 · 미국달러투자형 1/3)의 비중을 5% 단위로 바꿔 가며
+// 펀드별 기대수익률 가중평균이 목표에 가장 가까운 조합을 고른다. mmfFixed=20이면(레벨UP·동시체크) MMF 20% 고정 후 나머지 80%로 계산.
+const HH_GROWTH = ['VU63300', 'VU61100', 'VU72000'];
+const HH_SAFE = ['VU40000', 'VU71002'];
+function hhTargetMix(targetPct, mmfFixed) {
+  const fixed = mmfFixed || 0, budget = 100 - fixed;
+  const r5 = v => Math.round(v / 5) * 5;
+  let best = null;
+  for (let g = 0; g <= budget; g += 5) {
+    const w = {}; FUND_DATA.forEach(f => { w[f.id] = 0; });
+    const us = r5(g / 2), jp = r5((g - us) / 2), ix = g - us - jp;
+    const s = budget - g, mmf = fixed ? 0 : r5(s * 2 / 3), usd = s - mmf; // MMF 고정 모드는 원본이 MMF를 20%로 다시 맞추므로 안정 몫은 달러로
+    w[HH_GROWTH[0]] = us; w[HH_GROWTH[1]] = jp; w[HH_GROWTH[2]] = ix;
+    w[HH_SAFE[0]] = mmf + fixed; w[HH_SAFE[1]] = usd;
+    const rate = hanhoPortfolioRate(w) * 100, gap = Math.abs(rate - targetPct);
+    if (!best || gap < best.gap - 1e-9) best = { w, rate, gap };
+  }
+  return best;
+}

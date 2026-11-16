@@ -1082,27 +1082,21 @@ function applyAIRecommend(type) {
       ? "MMF형 20% 고정 후, 나머지 80%를 수익·안정·분산투자를 동시에 고려한 AI 최적 배분합니다."
       : "수익·안정·분산투자를 동시에 고려한 AI 최적 포트폴리오입니다. 지역·자산 다각화를 포함합니다.";
 
-    const scored = targetStats.map(f => {
-      const maxSharpe = Math.max(...targetStats.map(x => Math.abs(x.sharpe)));
-      const maxVol    = Math.max(...targetStats.map(x => x.volatility));
-      const maxRet    = Math.max(...targetStats.map(x => x.annualReturn));
-      const s1 = maxSharpe > 0 ? (f.sharpe / maxSharpe) * 50 : 0;
-      const s2 = maxVol    > 0 ? ((maxVol - f.volatility) / maxVol) * 25 : 0;
-      const s3 = maxRet    > 0 ? (Math.max(0, f.annualReturn) / maxRet) * 25 : 0;
-      return { ...f, score: s1 + s2 + s3 };
-    }).sort((a, b) => b.score - a.score);
-
-    const top5 = scored.slice(0, 5);
-    const totalScore = top5.reduce((a, f) => a + f.score, 0);
+    // 한호 2.3.0 (2026-11-16 주성씨 지시): 지금은 미국주식형II 100% (레벨UP·동시체크는 MMF 20% + 미국주식형II 80%)
     FUND_DATA.forEach(f => { weights[f.id] = 0; });
-    if (totalScore > 0) {
-      top5.forEach(f => {
-        weights[f.id] = Math.round((f.score / totalScore) * FREE_BUDGET / 5) * 5;
-      });
-    } else {
-      top5.forEach(f => { weights[f.id] = Math.round(FREE_BUDGET / Math.max(top5.length, 1) / 5) * 5; });
-    }
+    weights["VU63300"] = FREE_BUDGET;
 
+  } else if (type === "target") {
+    // 한호 2.3.0: 예상 수익률 설정 — 입력한 목표 연수익률에 가장 가까운 편성
+    const T = parseFloat(document.getElementById("hhTargetRate")?.value) || 0;
+    const fx = levelupMode ? 20 : 0;
+    const mix = hhTargetMix(T, fx);
+    const lo = hhTargetMix(0, fx).rate, hi = hhTargetMix(99, fx).rate;
+    emoji = "🎯";
+    methodName = `예상 수익률 설정 (목표 연 ${T}%)`;
+    methodDesc = `성장형(미국·일본·인덱스)과 안정형(MMF·달러)을 섞어 목표에 가장 가까운 연 ${mix.rate.toFixed(2)}%로 편성했습니다.` +
+      (T < lo - 0.3 || T > hi + 0.3 ? ` 목표 연 ${T}%는 편성 가능한 범위(연 ${lo.toFixed(1)}~${hi.toFixed(1)}%)를 벗어나 가장 가까운 값으로 맞췄습니다.` : '');
+    weights = mix.w;
   } else if (type === "momentum") {
     emoji = "🔥";
     methodName = "모멘텀 집중형 (최근 강세 집중)";

@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/cp-pro.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-light.css?v=2.0.0">
 <link rel="stylesheet" href="css/cp-print.css?v=2.0.0">
-<link rel="stylesheet" href="css/hanho-theme.css?v=2.2.2">
+<link rel="stylesheet" href="css/hanho-theme.css?v=2.3.1">
 </head>
 <body class="hanho">
 <div id="page1" class="page active">
@@ -224,7 +224,7 @@
               </div>
               <div class="ai-btn-text">
                 <span class="ai-btn-name">AI 균형 최적형</span>
-                <span class="ai-btn-desc">수익·안전 최적 균형</span>
+                <span class="ai-btn-desc">미국주식형II 집중</span>
               </div>
               <div class="ai-btn-rec-badge">추천</div>
             </button>
@@ -237,6 +237,24 @@
                 <span class="ai-btn-desc">최근 강세 집중</span>
               </div>
             </button>
+            <button class="ai-btn ai-btn-target" onclick="document.getElementById('hhTargetPanel').classList.toggle('open')">
+              <div class="ai-btn-icon-wrap">
+                <svg class="ai-ic" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="7" fill="currentColor" fill-opacity=".16"/><circle cx="16" cy="16" r="2" fill="currentColor"/></svg>
+              </div>
+              <div class="ai-btn-text">
+                <span class="ai-btn-name">예상 수익률 설정</span>
+                <span class="ai-btn-desc">목표 수익률로 자동 편성</span>
+              </div>
+            </button>
+          </div>
+          <div id="hhTargetPanel" class="hh-target-panel">
+            <label for="hhTargetRate">목표 기대 연수익률</label>
+            <div class="hh-target-row">
+              <input type="number" id="hhTargetRate" min="0" max="15" step="0.5" value="8" inputmode="decimal" onkeydown="if(event.key==='Enter')applyAIRecommend('target')">
+              <span>%</span>
+              <button type="button" class="hh-target-go" onclick="applyAIRecommend('target')">편성하기</button>
+            </div>
+            <p>입력한 수익률에 가장 가깝게 펀드 비율을 자동으로 맞춥니다 (5% 단위).</p>
           </div>
           <div id="aiResultBox" class="ai-result-box" style="display:none;"></div>
         </div>
@@ -417,8 +435,8 @@
 <script src="js/fund-latest.js?v=2.0.0"></script>
 <script src="js/fund-merge.js?v=2.0.0"></script>
 <script src="js/config.js?v=2.0.0"></script>
-<script src="js/main.v18.js?v=2.2.3"></script>
-<script src="js/hanho-calc.js?v=2.2.0"></script>
+<script src="js/main.v18.js?v=2.3.0"></script>
+<script src="js/hanho-calc.js?v=2.3.0"></script>
 <script src="js/hh-product.js?v=2.2.3"></script>
 <script src="js/cp-print.js?v=2.0.0"></script>
 <script>document.getElementById('hhToday').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'});</script>
