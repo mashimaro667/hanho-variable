@@ -1039,8 +1039,8 @@ function applyAIRecommend(type) {
 
   if (type === "sharpe") {
     emoji = "📈";
-    methodName = "수익 최적형 (공격적 시나리오 · 연 25%)";
-    methodDesc = "⚠ 최근 3년 상승장 수준인 연 25%가 앞으로도 매년 이어진다고 가정한 공격적 시나리오입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다." +
+    methodName = "수익 최적형 (공격적 시나리오 · 연 20%대)";
+    methodDesc = "⚠ 편성한 펀드의 최근 3년 상승장 실적(연환산의 75%, 연 20%대)이 앞으로도 매년 이어진다고 가정한 공격적 시나리오입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다." +
       (levelupMode ? " (MMF형 20% 고정 후 나머지 80% 배분)" : "");
 
     const positives = targetStats.filter(f => f.sharpe > 0).sort((a, b) => b.sharpe - a.sharpe);

@@ -37,8 +37,8 @@ function hanhoFundRate(f) {
 
 // weights: {펀드id: 비율} → 연 기대수익률(소수)
 function hanhoPortfolioRate(weights) {
-  // 2.6.0: 공격적 시나리오(수익 최적형)를 누르면 펀드별 기대수익률 대신 HH.rateOverride(연 %)를 쓴다
-  if (window.HH && window.HH.rateOverride != null) return window.HH.rateOverride / 100;
+  // 2.7.2 공격적 시나리오(수익 최적형): 편성한 펀드의 최근 3년 연환산 실적 × 75%를 가중평균, 20.00~29.90% 안으로
+  if (window.HH && window.HH.rateOverride != null) return hhAggressiveRate(weights) / 100;
   let s = 0, t = 0;
   FUND_DATA.forEach(f => { const w = +weights[f.id] || 0; if (w > 0) { s += w * hanhoFundRate(f).rate; t += w; } });
   return t > 0 ? s / t / 100 : 0;
@@ -161,4 +161,12 @@ function hhTargetMix(targetPct, mmfFixed) {
     if (!best || gap < best.gap - 1e-9) best = { w, rate, gap };
   }
   return best;
+}
+
+// 2.7.2 (2026-11-17 주성씨 지시: "25% 딱 맞추지 말고 20%대로"): 공격적 시나리오 수익률(연 %)
+function hhAggressiveRate(weights) {
+  let s = 0, t = 0;
+  FUND_DATA.forEach(f => { const w = +weights[f.id] || 0; if (w > 0 && f.id !== 'VU40000') { s += w * hanhoFundRate(f).c3 * 0.75; t += w; } });   // 레벨UP 의무 MMF는 빼고 계산
+  const v = t > 0 ? s / t : 20;
+  return Math.min(29.9, Math.max(20, v));
 }
