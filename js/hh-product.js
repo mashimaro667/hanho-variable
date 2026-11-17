@@ -125,7 +125,7 @@
   }
   function watch(id) {
     const el = $(id); if (!el) return;
-    new MutationObserver(() => relabelTree(el)).observe(el, { childList: true, subtree: true, characterData: true });
+    new MutationObserver(() => { relabelTree(el); if (id === 'page2') markPage2(); }).observe(el, { childList: true, subtree: true, characterData: true });
   }
   if (window.Chart && Chart.register) Chart.register({ id: 'hhRelabel', beforeInit(c) {
     (c.data.datasets || []).forEach(d => { if (d.label) d.label = relabel(d.label); });
@@ -145,6 +145,7 @@
   let manualTimer = null, manualLabel = '';
   function refreshManual() {
     clearTimeout(manualTimer);
+    HH.rateOverride = null;
     manualTimer = setTimeout(() => {
       const w = hanhoWeightsFromDom();
       const total = Object.values(w).reduce((a, b) => a + b, 0);
@@ -162,6 +163,38 @@
   wrapManual('syncInputFromSlider'); wrapManual('syncSliderFromInput');
   wrapManual('applyPreset', a => PRESET_NAME[a[0]] || a[0]);
   wrapManual('resetRatios', () => '초기화');
+
+  // 2.6.0 공격적 시나리오: 수익 최적형을 누르면 연 25%로 계산, 다른 탭·직접 설정이면 해제
+  const AGGRESSIVE = 25;
+  const WARN = `⚠ 공격적 시나리오: 최근 3년 상승장 수준인 연 ${AGGRESSIVE}%가 매년 이어진다고 가정한 값입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다.`;
+  const origAI = window.applyAIRecommend;
+  window.applyAIRecommend = function (type) {
+    HH.rateOverride = type === 'sharpe' ? AGGRESSIVE : null;
+    return origAI.apply(this, arguments);
+  };
+  const origPreview = window.updatePreview;
+  window.updatePreview = function () {
+    const r = origPreview.apply(this, arguments);
+    const ed = $('expectDetail');
+    if (ed && HH.rateOverride != null) ed.insertAdjacentHTML('afterbegin', `<div class="hh-aggr-warn">${WARN}</div>`);
+    const lbl = document.querySelector('.hh-expect-main span');
+    if (lbl) lbl.textContent = HH.rateOverride != null ? '공격적 시나리오 연수익률' : '기대 연수익률';
+    return r;
+  };
+  function markPage2() {
+    const p2 = $('page2'); if (!p2) return;
+    const has = p2.querySelector('.hh-aggr-warn');
+    const on = !!HH.aggrProposal;
+    if (on && !has) { const sb = $('simBasis'); (sb?.closest('div') || p2).insertAdjacentHTML('beforebegin', `<div class="hh-aggr-warn">${WARN}</div>`); }
+    if (!on && has) has.remove();
+  }
+  const origGen2 = window.generateProposal;
+  window.generateProposal = function () {
+    const r = origGen2.apply(this, arguments);
+    HH.aggrProposal = HH.rateOverride != null;
+    setTimeout(markPage2, 50); setTimeout(markPage2, 600);
+    return r;
+  };
 
   function init() {
     document.querySelectorAll('#hhProdRow .hh-pbtn').forEach(b => b.addEventListener('click', () => onClick(b.dataset.k)));

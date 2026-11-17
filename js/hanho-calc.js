@@ -37,6 +37,8 @@ function hanhoFundRate(f) {
 
 // weights: {펀드id: 비율} → 연 기대수익률(소수)
 function hanhoPortfolioRate(weights) {
+  // 2.6.0: 공격적 시나리오(수익 최적형)를 누르면 펀드별 기대수익률 대신 HH.rateOverride(연 %)를 쓴다
+  if (window.HH && window.HH.rateOverride != null) return window.HH.rateOverride / 100;
   let s = 0, t = 0;
   FUND_DATA.forEach(f => { const w = +weights[f.id] || 0; if (w > 0) { s += w * hanhoFundRate(f).rate; t += w; } });
   return t > 0 ? s / t / 100 : 0;
