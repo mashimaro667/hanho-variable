@@ -174,7 +174,8 @@
           <span class="step-title">펀드 포트폴리오 비율 설정</span>
           <span id="totalRatioDisplay" class="ratio-total ok">합계: 100%</span>
         </div>
-        <div class="ratio-helper">
+        <!-- 2.6.1 (2026-11-17 주성씨 지시: "이 부분 빼, 어차피 위에 있잖아"): 직접 설정 버튼 줄 숨김 (위 AI 버튼과 겹침) -->
+        <div class="ratio-helper" style="display:none">
           <button class="preset-btn" onclick="applyPreset('안정형')"><i class="fa-solid fa-shield"></i> 안정형</button>
           <button class="preset-btn" onclick="applyPreset('균형형')"><i class="fa-solid fa-scale-balanced"></i> 균형형</button>
           <button class="preset-btn" onclick="applyPreset('성장형')"><i class="fa-solid fa-rocket"></i> 성장형</button>
