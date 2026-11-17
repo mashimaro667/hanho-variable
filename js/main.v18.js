@@ -1060,11 +1060,12 @@ function applyAIRecommend(type) {
     emoji = "🛡️";
     methodName = "안전 우선형 (최소 분산 전략)";
     methodDesc = levelupMode
-      ? "MMF형 20% 고정 후, 나머지를 달러·주식에 나눠 기대 연 5% 안팎으로 맞춘 안정형 편성입니다."
-      : "MMF·달러 위주에 주식을 일부 섞어 기대 연 5% 안팎으로 맞춘 안정형 편성입니다.";
+      ? "MMF형 100%로 원금 변동을 가장 작게 하는 편성입니다."
+      : "MMF형 100%로 원금 변동을 가장 작게 하는 편성입니다.";
 
-    // 한호 2.4.0: MMF 100%(연 2%)로 쏠리던 것을 기대 연 5% 안팎의 안정형 편성으로 (MMF·달러 위주 + 일부 주식)
-    weights = hhTargetMix(5, levelupMode ? 20 : 0).w;
+    // 한호 2.5.2 (2026-11-17 주성씨 지시: "안전 우선형은 MMF 100%"): 레벨UP·동시체크여도 MMF 100%
+    FUND_DATA.forEach(f => { weights[f.id] = 0; });
+    weights["VU40000"] = 100;
 
   } else if (type === "balanced") {
     emoji = "🤖";
@@ -1108,7 +1109,7 @@ function applyAIRecommend(type) {
   }
 
   // MMF 20% 고정 모드: MMF 20% 세팅 (레벨UP 또는 동시체크)
-  if (levelupMode) {
+  if (levelupMode && type !== "lowrisk") {   // 2.5.2: 안전 우선형은 MMF 100% 그대로
     weights[MMF_ID] = 20;
   }
 
@@ -2030,7 +2031,7 @@ function enforceLevelupMMF() {
   const mmfEl = document.getElementById("ratio_VU40000");
   if (!mmfEl) return;
   const current = parseFloat(mmfEl.value) || 0;
-  if (current !== 20) {
+  if (current < 20) {   // 2.5.2: MMF 20%는 최소 비중으로 (안전 우선형 MMF 100% 허용)
     setFundRatio("VU40000", 20);
     // 동시체크 전용 안내 (레벨UP 경고와 구분)
     if (isCrossChecked() && !isLevelupChecked()) {
