@@ -1068,7 +1068,7 @@ function applyAIRecommend(type) {
 
   } else if (type === "balanced") {
     emoji = "🤖";
-    methodName = "AI 균형 최적형 (미국주식형II 집중)";
+    methodName = "AI 균형 최적형 (최근 시장 반영)";
     methodDesc = levelupMode
       ? "MMF형 20% 고정 후 나머지 80%를 미국주식형II에 배분합니다."
       : "미국주식형II 100%로 편성합니다.";
