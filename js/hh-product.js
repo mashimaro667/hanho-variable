@@ -166,7 +166,7 @@
 
   // 2.6.0 공격적 시나리오: 수익 최적형을 누르면 연 25%로 계산, 다른 탭·직접 설정이면 해제
   const AGGRESSIVE = 1;   // 켜짐 표시 (실제 수익률은 hhAggressiveRate가 계산)
-  const WARN = '⚠ 공격적 시나리오: 최근 3년 상승장 실적(연환산의 75%, 연 20%대)이 매년 이어진다고 가정한 값입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다.';
+  const WARN = '⚠ 공격적 시나리오: 최근 3년 상승장 실적(연환산의 75%)이 매년 이어진다고 가정한 값입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다.';
   const origAI = window.applyAIRecommend;
   window.applyAIRecommend = function (type) {
     HH.rateOverride = type === 'sharpe' ? AGGRESSIVE : null;

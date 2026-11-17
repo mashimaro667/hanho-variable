@@ -1039,8 +1039,8 @@ function applyAIRecommend(type) {
 
   if (type === "sharpe") {
     emoji = "📈";
-    methodName = "수익 최적형 (공격적 시나리오 · 연 20%대)";
-    methodDesc = "⚠ 편성한 펀드의 최근 3년 상승장 실적(연환산의 75%, 연 20%대)이 앞으로도 매년 이어진다고 가정한 공격적 시나리오입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다." +
+    methodName = "수익 집중형 (공격적 시나리오)";
+    methodDesc = "⚠ 편성한 펀드의 최근 3년 상승장 실적(연환산의 75%)이 앞으로도 매년 이어진다고 가정한 공격적 시나리오입니다. 실제 수익을 보장하지 않으며 손실이 날 수 있습니다." +
       (levelupMode ? " (MMF형 20% 고정 후 나머지 80% 배분)" : "");
 
     const positives = targetStats.filter(f => f.sharpe > 0).sort((a, b) => b.sharpe - a.sharpe);
@@ -1068,7 +1068,7 @@ function applyAIRecommend(type) {
 
   } else if (type === "balanced") {
     emoji = "🤖";
-    methodName = "AI 균형 최적형 (최근 시장 반영)";
+    methodName = "AI 추천형 (최근 시장 반영)";
     methodDesc = levelupMode
       ? "MMF형 20% 고정 후 나머지 80%를 미국주식형II에 배분합니다."
       : "미국주식형II 100%로 편성합니다.";
@@ -1090,7 +1090,7 @@ function applyAIRecommend(type) {
     weights = mix.w;
   } else if (type === "momentum") {
     emoji = "🔥";
-    methodName = "모멘텀 집중형 (최근 강세 집중)";
+    methodName = "밸런스형 (균형적 투자)";
     methodDesc = levelupMode
       ? "MMF형 20% 고정 후, 나머지 80%를 최근 1년·3개월 수익률이 가장 높은 펀드에 집중 배분합니다."
       : "최근 1년·3개월 수익률이 가장 높은 펀드에 집중 배분합니다.";
