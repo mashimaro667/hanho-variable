@@ -909,9 +909,9 @@ const cpTowerPlugin = {
     const n = (ds.data || []).filter(v => v > 0).length;
     ctx.save();
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#EEF1F6'; ctx.font = '800 ' + Math.round(ir * 0.46) + 'px ' + font;
+    ctx.fillStyle = '#0F4C45'; ctx.font = '800 ' + Math.round(ir * 0.46) + 'px ' + font;
     ctx.fillText(sum + '%', x, y - ir * 0.10);
-    ctx.fillStyle = '#8FA3C7'; ctx.font = '500 ' + Math.max(10, Math.round(ir * 0.20)) + 'px ' + font;
+    ctx.fillStyle = '#8A918C'; ctx.font = '500 ' + Math.max(10, Math.round(ir * 0.20)) + 'px ' + font;
     ctx.fillText(n + '개 펀드', x, y + ir * 0.34);
     ctx.restore();
   }
@@ -1068,10 +1068,10 @@ function applyAIRecommend(type) {
 
   } else if (type === "balanced") {
     emoji = "🤖";
-    methodName = "AI 균형 최적형 (다각화 최적화)";
+    methodName = "AI 균형 최적형 (미국주식형II 집중)";
     methodDesc = levelupMode
-      ? "MMF형 20% 고정 후, 나머지 80%를 수익·안정·분산투자를 동시에 고려한 AI 최적 배분합니다."
-      : "수익·안정·분산투자를 동시에 고려한 AI 최적 포트폴리오입니다. 지역·자산 다각화를 포함합니다.";
+      ? "MMF형 20% 고정 후 나머지 80%를 미국주식형II에 배분합니다."
+      : "미국주식형II 100%로 편성합니다.";
 
     // 한호 2.3.0 (2026-11-16 주성씨 지시): 지금은 미국주식형II 100% (레벨UP·동시체크는 MMF 20% + 미국주식형II 80%)
     FUND_DATA.forEach(f => { weights[f.id] = 0; });
@@ -1511,7 +1511,7 @@ function renderPage2() {
         <i class="fa-solid fa-address-card"></i>
         고객 투자 프로파일
         <span class="profile-mokg-badge">
-          <i class="fa-solid fa-piggy-bank"></i> 모으고키우고
+          <i class="fa-solid fa-piggy-bank"></i> ${(window.HH && HH.product === "annuity") ? "모키연금" : "모키적립"}${(window.HH && HH.lump) ? " 일시납" : ""}
         </span>`;
     } else {
       profileTitleEl.innerHTML = `<i class="fa-solid fa-address-card"></i> 고객 투자 프로파일`;
@@ -2178,12 +2178,12 @@ function updateExpenseStatusBadge() {
   } else if (isMokiChecked()) {
     badge.innerHTML = `
       <span class="expense-status-badge on moki-badge">
-        <i class="fa-solid fa-piggy-bank"></i> 모키(일시납)사업비 반영
+        <i class="fa-solid fa-piggy-bank"></i> 모키(일시납) 사업비 반영
       </span>`;
   } else if (isExpenseChecked()) {
     badge.innerHTML = `
       <span class="expense-status-badge on mokg-badge">
-        <i class="fa-solid fa-circle-check"></i> 모키(적립형)사업비 반영
+        <i class="fa-solid fa-circle-check"></i> 모키(적립형) 사업비 반영
       </span>`;
   } else {
     badge.innerHTML = `
@@ -3017,7 +3017,7 @@ function renderSimLineChart() {
             font: { size: 11 },
             color: '#9ca3af',
             callback: (v) => {
-              if (v >= 10000) return `${(v / 10000).toFixed(0)}억`;
+              if (v >= 10000) return `${+(v / 10000).toFixed(1)}억`;
               if (v >= 1000)  return `${(v / 1000).toFixed(0)}천만`;
               return `${v.toLocaleString()}만`;
             }

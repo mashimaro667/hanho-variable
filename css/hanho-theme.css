@@ -201,3 +201,37 @@ body.hanho .hh-target-panel p{margin-top:8px;font-size:12px;color:#4B5752}
 
 /* 2.6.0 공격적 시나리오 경고 */
 .hh-aggr-warn{margin:8px 0;padding:10px 12px;border:1.5px solid #C0392B;border-radius:10px;background:#FDECEA;color:#8E2B20;font-size:12.5px;font-weight:700;line-height:1.5}
+
+/* ── 2.7.0 디자인 정리 ── */
+/* 제안서 '사업비 반영' 배지: 남색 바탕에 흐린 글씨 → 밝은 바탕 진한 글씨 */
+body.hanho .expense-status-badge,body.hanho .expense-status-badge.on,body.hanho .expense-status-badge.mokg-badge,body.hanho .expense-status-badge.moki-badge,body.hanho .expense-status-badge.levelup-badge{background:#E3EFEC!important;color:#0F4C45!important;border:1px solid #CFE3DE!important;-webkit-text-fill-color:#0F4C45!important;animation:none!important;font-weight:800!important}
+body.hanho .expense-status-badge.off{background:#F5F2EA!important;color:#8A918C!important;-webkit-text-fill-color:#8A918C!important;border:1px dashed #CFC6B2!important}
+body.hanho .expense-status-badge *{color:inherit!important;-webkit-text-fill-color:inherit!important}
+/* 표 머리글의 작은 '사업비 반영' 표시 */
+body.hanho .expense-badge-th,body.hanho .expense-badge-th.moki-badge-th{background:#F3E5D6!important;color:#8E5422!important;-webkit-text-fill-color:#8E5422!important;border:0!important;font-weight:700!important}
+/* 제안서 프로필 상품 배지 */
+body.hanho .profile-mokg-badge,body.hanho .profile-levelup-badge{background:#0F4C45!important;color:#fff!important;-webkit-text-fill-color:#fff!important;border:0!important;box-shadow:none!important}
+/* 비어 있는(0%) 펀드 줄 글씨가 너무 흐림 */
+body.hanho .slider-card.zero-ratio{opacity:.75!important}
+/* 휴대폰: 예상 수익률 설정 버튼은 한 줄 전체 */
+@media (max-width:900px){body.hanho .ai-rec-types .ai-btn-target{grid-column:1 / -1}}
+/* 휴대폰 제안서: 표가 오른쪽에서 잘리던 문제 → 비고 열 숨기고 글자 줄임, 남으면 가로 스크롤 */
+@media (max-width:600px){
+  body.hanho .sim-table-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  body.hanho #simTable{min-width:0!important;width:100%!important;font-size:12px!important}
+  body.hanho #simTable th:last-child,body.hanho #simTable td:last-child{display:none!important}
+  body.hanho #simTable th,body.hanho #simTable td{padding:8px 4px!important;white-space:nowrap}
+  body.hanho #simTable td .sim-sub,body.hanho #simTable td small,body.hanho #simTable .first-year-tip,body.hanho #simTable td div[class*="tip"]{display:none!important}
+  body.hanho #simTable .expense-badge-th{display:none!important}
+  /* 제안서 머리글 정리 */
+  body.hanho .page2-header .hh-in{gap:8px;padding:10px 12px}
+  body.hanho #page2 .proposal-main-title{font-size:16px!important}
+  body.hanho .back-btn,body.hanho .print-btn{padding:6px 12px!important;font-size:12.5px!important}
+}
+
+/* 2.7.1 휴대폰 제안서 표: 구분·납입원금·예상 평가액·누적 수익률 4열만 */
+@media (max-width:600px){
+  body.hanho #simTable th:nth-child(3),body.hanho #simTable td:nth-child(3){display:none!important}
+  body.hanho #simTable td div:not(:first-child),body.hanho #simTable td .tip,body.hanho #simTable td [class*="note"],body.hanho #simTable td [class*="hint"]{display:none!important}
+  body.hanho #simTable{font-size:12.5px!important}
+}
